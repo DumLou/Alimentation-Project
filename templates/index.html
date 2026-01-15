@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alternatives — Reco Alimentaire</title>
+   <!-- Polices -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Climate+Crisis&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@100&display=swap" rel="stylesheet">
+
+
+  <!-- STYLE SHEET -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+  <!-- HEADER -->
+  <header class="header fade-in">
+    <div class="logo">Alternatives</div>
+    <nav class="nav">
+      <a href="#services">Services</a>
+      <a href="#travail">Mon travail</a>
+      <a href="#apropos">À propos de moi</a>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero fade-in">
+    <h1 class="hero-title">Un système de recommandation<br>pour une alimentation plus durable </h1>
+    
+    <p> Faciliter la transition vers des produits plus éthiques, nutritifs et responsables.</p>
+  </section>
+
+  <!-- SEARCH -->
+<section id="recherche" class="section fade-in">
+  <h2>Rechercher un produit</h2>
+
+  <form method="POST" class="search-container">
+
+    <!-- Product -->
+    <input type="text" name="product" placeholder="Nom du produit..." required>
+
+    <!-- Brand -->
+    <input type="text" name="brand" placeholder="Marque (optionnel)">
+
+    <!-- Nutriscore -->
+    <select name="nutriscore">
+      <option value="">Nutriscore (optionnel)</option>
+      <option value="a">A (excellent)</option>
+      <option value="b">B</option>
+      <option value="c">C</option>
+      <option value="d">D</option>
+      <option value="e">E (mauvais)</option>
+    </select>
+
+    <!-- Label -->
+    <input type="text" name="label" placeholder="Préférence (bio, vegan, sans gluten...)">
+
+    <!-- Origine -->
+    <input type="text" name="origin" placeholder="Origine (France, UE, Italie...)">
+
+    <!-- Similarity -->
+    <label>Ressemblance</label>
+    <select name="similarity_level">
+      <option value="5">5 — Produit quasi identique</option>
+      <option value="4">4 — Très proche</option>
+      <option value="3">3 — Similaire</option>
+      <option value="2">2 — Assez différent</option>
+      <option value="1">1 — Lointain</option>
+    </select>
+
+    <!-- Weight -->
+    <label>Poids des critères</label>
+    <input type="number" name="label_weight" value="1" step="0.1" min="0" placeholder="Poids label">
+    <input type="number" name="nutri_weight" value="1" step="0.1" min="0" placeholder="Poids Nutriscore">
+    <input type="number" name="env_weight" value="1" step="0.1" min="0" placeholder="Poids environnement">
+
+    <!-- Brand substitution -->
+    <label>Changer de marque ?</label>
+    <select name="substitute_other_brand">
+      <option value="oui">Oui</option>
+      <option value="non">Non</option>
+    </select>
+
+    <button type="submit">Rechercher</button>
+  </form>
+
+    {% if results %}
+    <div id="searchResults" class="results">
+      <h3>Résultats :</h3>
+      <ul>
+        {% for r in results %}
+          <li>
+            <strong>{{ r['product_name'] }}</strong><br>
+
+            <b>Catégorie :</b> {{ r['category_display'] }}<br>
+            <b>Similarité :</b> {{ "%.2f"|format(r['similarity']) }}<br>
+            <b>Nutriscore :</b> {{ r['nutriscore_grade'] }}
+            {% if r['better_nutriscore'] %}
+               (meilleur)
+            {% endif %}<br>
+
+            <b>Labels :</b> {{ r['labels_tags_clean'] or "—" }}<br>
+            <b>Origine :</b> {{ r['origins_clean'] or "—" }}<br>
+
+            ⭐ <b>Score final :</b> {{ "%.2f"|format(r['final_score']) }}
+          </li>
+          <hr>
+        {% endfor %}
+      </ul>
+    </div>
+
+  {% elif results is not none %}
+    <p>Aucun produit trouvé.</p>
+  {% endif %}
+</section>
+
+
+
+  <!-- SERVICES -->
+<section id="services" class="section bloc-section fade-in">
+  <h2>Services</h2>
+  <div class="cards">
+    <div class="card">
+      <h3>Analyse des produits</h3>
+      <p>Identifier les marques et enseignes selon leurs impacts sociaux et environnementaux.</p>
+    </div>
+    <div class="card">
+      <h3>Recommandations personnalisées</h3>
+      <p>Proposer des alternatives selon la nutrition et les valeurs de chacun.</p>
+    </div>
+    <div class="card">
+      <h3>Se renseigner</h3>
+      <p>Mettre en avant l’origine de nos biens de consommation et des politiques de leur producteurs.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MY WORK -->
+<section id="travail" class="section bloc-section fade-in">
+  <h2>Mon travail</h2>
+  <p>
+    Le projet combine analyse de données, développement web et conception éthique.
+J’utilise un jeu de données disponible sur la plateforme Open Food Facts afin de développer un système de recommandation personnalisé basé sur ces critères. 
+Les données de cette base sont open data et publiées sous la Open Database License (ODbL).
+L’interface utilisateur est conçue pour être intuitive et accessible, facilitant la recherche et la comparaison de produits selon différents labels et valeurs nutritionnelles.
+Le projet vise à sensibiliser les consommateurs et à encourager des choix alimentaires plus responsables, tout en mettant en avant la transparence des informations et la durabilité.
+De plus, des fonctionnalités interactives permettent aux utilisateurs de filtrer et de visualiser facilement les produits selon leurs préférences personnelles
+  </p>
+</section>
+
+<!-- ABOUT -->
+<section id="apropos" class="section bloc-section fade-in">
+  <h2>À propos de moi</h2>
+  <p>
+    Je suis Louison Dumont, étudiante en Cycle Pluridisciplinaire d'Etude Supérieure orienté autour de la sciences des données, de l'art et la culture.
+    Dans le cadre de ce projet, j'ai appliqué mes compétences en analyse de données et développement web pour faciliter des choix alimentaires durables.
+  </p>
+</section>
+
+  <footer>
+    © 2025 – Projet Alternatives | Développement durable & innovation
+  </footer>
+
+  <!-- ANIMATION SCRIPT -->
+  <script>
+    const faders = document.querySelectorAll('.fade-in');
+    const appearOptions = { threshold: 0.2, rootMargin: "0px 0px -50px 0px" };
+
+    const appearOnScroll = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      });
+    }, appearOptions);
+
+    faders.forEach(fader => {
+      appearOnScroll.observe(fader);
+    });
+
+    window.addEventListener('load', () => {
+      document.querySelector('.hero-title').classList.add('slide-in');
+    });
+  </script>
+
+</body>
+</html>

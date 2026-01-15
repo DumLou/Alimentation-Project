@@ -1,0 +1,334 @@
+:root {
+  --vert: #747b53eb;
+  --orange: #a73418db;
+  --gris: #525151;
+  --fond: #f4e5d6;
+}
+
+html {
+  scroll-behavior: auto;
+}
+
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: var(--fond);
+  color: var(--gris);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* HEADER */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 3rem;
+  background: var(--fond);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.logo {
+  font-family: 'Exo 2', sans-serif;
+  font-size: 2rem;
+  font-weight: 100;
+  color: var(--orange);
+}
+
+.nav a {
+  text-decoration: none;
+  color: var(--gris);
+  font-weight: 900;
+  margin-left: 1.5rem;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.nav a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -4px;
+  left: 0;
+  background-color: var(--vert);
+  transition: width 0.3s ease;
+}
+.nav a:hover {
+  color: var(--vert);
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
+
+.nav a:hover::after {
+  width: 100%;
+}
+
+/* HERO */
+.hero {
+  text-align: center;
+  padding: 6rem 4rem 6rem;
+  background: linear-gradient(135deg, #a73214 0%, #619d75 100%);
+  color: white;
+  overflow: hidden;
+}
+
+.hero h1 {
+  font-family: 'Climate Crisis', sans-serif;
+  font-weight: 300;
+  text-transform: uppercase;
+  font-size: clamp(5rem, 6.5vw, 6rem);
+  line-height: 0.8;
+  letter-spacing: -0.02em;
+  color: var(--fond);
+  text-shadow: 4px 4px 0 var(--vert);
+
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+
+}
+
+.hero h1.slide-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Sous-titre */
+.hero p {
+  font-weight: 400;
+  font-size: clamp(1rem, 1.8vw, 1.25rem);
+  opacity: 0.95;
+  max-width: 850px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+
+/* SECTIONS */
+
+.section {
+  padding: 5rem 2rem;
+  max-width: 1000px;
+  margin: auto;
+}
+
+/* BLOCS */
+
+html {
+  scroll-behavior: smooth;
+}
+
+.bloc-section {
+  background: var(--orange); 
+  border-radius: 40px; 
+  padding: 4rem 3rem;
+  margin: 3rem auto;
+  box-shadow: var(--gris);
+  text-align: left;
+}
+
+.bloc-section h2 {
+  font-family: 'Big Shoulders Display', sans-serif;
+  font-size: 2.8rem;
+  color: #111;
+  margin-bottom: 1.5rem;
+}
+
+.bloc-section p {
+  font-size: 1.1rem;
+  color: #141414;
+  max-width: 800px;
+  line-height: 1.7;
+}
+
+/* Effet */
+.bloc-section:hover {
+  transform: translateY(-4px);
+  transition: all 0.4s ease;
+}
+
+/* RECHERCHE */
+
+#recherche {
+  margin-top: 3rem;
+  padding: 4rem 2rem;
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 32px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+}
+
+/* Titre */
+#recherche h2 {
+  font-family: 'Big Shoulders Display', sans-serif;
+  font-size: 2.6rem;
+  color: var(--orange);
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+/* =========================
+   FORMULAIRE
+========================= */
+
+.search-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
+  align-items: center;
+}
+
+/* Champs */
+.search-container input,
+.search-container select {
+  padding: 12px 15px;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.15);
+  font-size: 1rem;
+  background: white;
+  transition: all 0.3s ease;
+}
+
+/* Focus */
+.search-container input:focus,
+.search-container select:focus {
+  outline: none;
+  border-color: var(--vert);
+  box-shadow: 0 0 0 3px rgba(116, 123, 83, 0.2);
+}
+
+/* =========================
+   POIDS (NUMBERS)
+========================= */
+
+.search-container input[type="number"] {
+  max-width: 140px;
+  justify-self: center;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* =========================
+   BOUTON
+========================= */
+
+.search-container button {
+  grid-column: 1 / -1;
+  justify-self: center;
+  padding: 14px 40px;
+  border: none;
+  border-radius: 30px;
+  background: linear-gradient(135deg, var(--vert), #3d7a5b);
+  color: white;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.35s ease;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* Hover bouton */
+.search-container button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.25);
+}
+
+/* =========================
+   RÉSULTATS
+========================= */
+
+.results {
+  margin-top: 3rem;
+}
+
+.results h3 {
+  font-size: 1.8rem;
+  color: var(--vert);
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.results ul {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 18px;
+}
+
+/* Carte produit */
+.results li {
+  background: white;
+  border-radius: 16px;
+  padding: 18px 22px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  border-left: 6px solid var(--vert);
+  transition: transform 0.3s ease;
+}
+
+/* Hover carte */
+.results li:hover {
+  transform: translateY(-4px);
+}
+
+/* Nom produit */
+.results li strong {
+  font-size: 1.25rem;
+  color: var(--orange);
+}
+
+/* Infos secondaires */
+.results li span {
+  display: block;
+  font-size: 0.95rem;
+  margin-top: 4px;
+  color: #444;
+}
+
+/* Badges (si ajout plus tard) */
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-right: 6px;
+  background: var(--vert);
+  color: white;
+}
+
+
+
+/* CARTES */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.card {
+  background: var(--fond);
+  border-radius: 12px;
+  padding: 1.8rem;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  border-top: 4px solid var(--vert);
+}
+
+.card:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
+
+/* FOOTER */
+footer {
+  text-align: center;
+  padding: 2rem;
+  font-size: 0.9rem;
+  background: var(--vert);
+  color: white;
+}
+
