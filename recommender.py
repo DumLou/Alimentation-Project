@@ -33,6 +33,19 @@ NUTRI_MAP = {"a":5, "b":4, "c":3, "d":2, "e":1}
 
 
 # LABEL KEYWORDS
+# LABEL KEYWORDS
+LABEL_KEYWORDS = {
+    "bio": ["bio", "biologique", "ab", "naturel", "organic"],
+    "vegan": ["vegan", "végétal", "végane", "plant-based"],
+    "végétarien": ["végétarien", "vegetarian"],
+    "bon nutriscore": ["nutriscore a", "nutriscore b"],
+    "sans additifs": ["sans additif", "no additives"],
+    "sans conservateurs": ["sans conservateur", "no preservative"],
+    "allégé gras_sel_sucre": ["light", "allégé", "low fat", "low sugar"],
+    "durable environnement": ["durable", "éco", "responsable", "planet"],
+    "label qualité": ["label", "certifié", "quality"],
+    "sans gluten": ["sans gluten", "gluten free"]}
+
 def labels_matches(text: str, label_keywords=LABEL_KEYWORDS):
     """
     Returns a list of detected labels from a text (e.g., labels_tags or ingredients_tags)
