@@ -11,9 +11,10 @@ from sklearn.preprocessing import StandardScaler, OrdinalEncoder
 from sklearn.neighbors import NearestNeighbors
 import gdown
 
+# SETUP PATHS AND DOWNLOAD/EXTRACT MODELS
 BASE_DIR = Path(__file__).resolve().parent
 MODEL_DIR = BASE_DIR / "models"
-MODEL_DIR.mkdir(exist_ok=True)
+MODEL_DIR.mkdir(exist_ok=True)  # Create if not exists
 
 ZIP_ID = "1z5RsjM7pxHJ_0FjNiLcdF7WJYYYbH7H0"
 ZIP_PATH = BASE_DIR / "models.zip"
@@ -29,11 +30,18 @@ if not ZIP_PATH.exists():
 
 # Dezip if model directory is empty
 if not any(MODEL_DIR.iterdir()):
-    print("Extraction du ZIP...")
+    print("Extraction du ZIP…")
     with zipfile.ZipFile(ZIP_PATH, "r") as zip_ref:
-        zip_ref.extractall(MODEL_DIR)
+        # Check each member
+        for member in zip_ref.namelist():
+            # Extract only files, ignore directories
+            filename = Path(member).name
+            if filename:  # Non-empty means it's a file
+                target_path = MODEL_DIR / filename
+                with zip_ref.open(member) as source, open(target_path, "wb") as target:
+                    target.write(source.read())
 
-# 
+# Load data and models
 df = pd.read_parquet(MODEL_DIR / "products.parquet")
 X_final = joblib.load(MODEL_DIR / "embeddings.joblib")
 nn_model = joblib.load(MODEL_DIR / "nn_model.joblib")
