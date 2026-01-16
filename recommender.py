@@ -6,9 +6,6 @@ from pathlib import Path
 import re
 import zipfile
 import joblib
-import requests
-from sklearn.preprocessing import StandardScaler, OrdinalEncoder
-from sklearn.neighbors import NearestNeighbors
 import gdown
 
 # SETUP PATHS AND DOWNLOAD/EXTRACT MODELS
@@ -30,7 +27,6 @@ if not ZIP_PATH.exists():
 
 # Dezip if model directory is empty
 if not any(MODEL_DIR.iterdir()):
-    print("Extraction du ZIP…")
     with zipfile.ZipFile(ZIP_PATH, "r") as zip_ref:
         # Check each member
         for member in zip_ref.namelist():
@@ -45,8 +41,8 @@ if not any(MODEL_DIR.iterdir()):
 df = pd.read_parquet(MODEL_DIR / "products.parquet")
 X_final = joblib.load(MODEL_DIR / "embeddings.joblib")
 nn_model = joblib.load(MODEL_DIR / "nn_model.joblib")
-scaler = joblib.load(MODEL_DIR / "scaler.joblib")
-ordinal_encoder = joblib.load(MODEL_DIR / "ordinal_encoder.joblib")
+#scaler = joblib.load(MODEL_DIR / "scaler.joblib")
+#ordinal_encoder = joblib.load(MODEL_DIR / "ordinal_encoder.joblib")
 
 # CLEANING PREP
 TEXT_COLUMNS = ["product_name_clean", "brands_clean", "main_category_clean",
@@ -58,6 +54,7 @@ for col in TEXT_COLUMNS:
 
 # Nutriscore mapping
 NUTRI_MAP = {"a":5, "b":4, "c":3, "d":2, "e":1}
+
 
 
 # LABEL KEYWORDS
@@ -154,9 +151,16 @@ def recommend_products(product_name, brand=None, nutriscore=None, label=None, or
 
     # NN on filtered candidates
     candidate_indices = candidates.index.tolist()
-    distances, indices = nn_model.kneighbors(X_final[candidate_indices], n_neighbors=len(candidate_indices))
-    similarity_scores = 1 - distances[0]  # cosine similarity
-    sim_df = pd.DataFrame({"idx": candidate_indices, "similarity": similarity_scores}).set_index("idx")
+
+    distances, indices = nn_model.kneighbors(
+    ref_vector, n_neighbors=min(len(candidate_indices), 200))
+
+    similarity_scores = 1 - distances[0]
+    neighbor_indices = indices[0]
+
+    sim_df = pd.DataFrame({"idx": df.iloc[neighbor_indices].index,
+    "similarity": similarity_scores}).set_index("idx")
+
     candidates = candidates.join(sim_df, how="inner")
 
     # Apply similarity threshold
@@ -199,39 +203,3 @@ def recommend_products(product_name, brand=None, nutriscore=None, label=None, or
     .fillna("Non renseignée")
 )
     return candidates
-
-# CLI TESTING
-if __name__ == "__main__":
-    print("\nBienvenue dans le système de recommandation !\n")
-    product = input("Nom du produit à remplacer : ")
-    brand = input("Marque (optionnel) : ") or None
-    nutriscore = input("Nutriscore du produit actuel (a-e, optionnel) : ") or None
-    label = input("Label préféré (bio, vegan, etc., optionnel) : ") or None
-    origin = input("Origine préférée (optionnel) : ") or None
-    similarity_level = int(input("Critère de ressemblance (1=lointain, 5=identique) : "))
-    label_weight = float(input("Poids du label : ") or 1)
-    nutri_weight = float(input("Poids Nutriscore : ") or 1)
-    env_weight = float(input("Poids environnement : ") or 1)
-
-    recs = recommend_products(
-        product_name=product,
-        brand=brand,
-        nutriscore=nutriscore,
-        label=label,
-        origin=origin,
-        similarity_level=similarity_level,
-        label_weight=label_weight,
-        nutri_weight=nutri_weight,
-        env_weight=env_weight,
-        top_n=5
-    )
-
-    if recs.empty:
-        print("\nAucune recommandation.")
-    else:
-        print(f"\nTop recommandations pour '{product}':\n")
-        for _, r in recs.iterrows():
-            print(f"- {r['product_name']} | Catégorie: {r['main_category_clean']} | "
-                  f"Similarité: {round(r['similarity'],2)} | Nutriscore: {r['nutriscore_grade']} | "
-                  f"Meilleur Nutriscore: {r['better_nutriscore']} | Labels: {r['labels_tags_clean']} | "
-                  f"Origine: {r['origins_clean']}")
