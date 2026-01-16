@@ -8,3 +8,4 @@ pyarrow
 sentence-transformers
 torch
 tqdm
+gdown

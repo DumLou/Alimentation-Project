@@ -9,40 +9,38 @@ import joblib
 import requests
 from sklearn.preprocessing import StandardScaler, OrdinalEncoder
 from sklearn.neighbors import NearestNeighbors
+import gdown
 
-
-# PATHS
 BASE_DIR = Path(__file__).resolve().parent
 MODEL_DIR = BASE_DIR / "models"
 MODEL_DIR.mkdir(exist_ok=True)
 
-# Google Drive : lien direct du ZIP
 ZIP_ID = "1z5RsjM7pxHJ_0FjNiLcdF7WJYYYbH7H0"
-ZIP_URL = f"https://drive.google.com/uc?export=download&id={ZIP_ID}"
 ZIP_PATH = BASE_DIR / "models.zip"
 
-# Télécharger le ZIP si nécessaire
+# Download ZIP if not exists
 if not ZIP_PATH.exists():
-    print("Téléchargement du dossier models depuis Google Drive…")
-    r = requests.get(ZIP_URL)
-    r.raise_for_status()
-    ZIP_PATH.write_bytes(r.content)
+    print("Téléchargement du ZIP models via gdown…")
+    gdown.download(
+        id=ZIP_ID,
+        output=str(ZIP_PATH),
+        quiet=False
+    )
 
-# Dézipper si le dossier models est vide
-if any(MODEL_DIR.iterdir()) == False:
+# Dezip if model directory is empty
+if not any(MODEL_DIR.iterdir()):
     print("Extraction du ZIP...")
     with zipfile.ZipFile(ZIP_PATH, "r") as zip_ref:
         zip_ref.extractall(MODEL_DIR)
 
-# Charger tous les fichiers
-print("Chargement des fichiers…")
+# 
 df = pd.read_parquet(MODEL_DIR / "products.parquet")
 X_final = joblib.load(MODEL_DIR / "embeddings.joblib")
 nn_model = joblib.load(MODEL_DIR / "nn_model.joblib")
 scaler = joblib.load(MODEL_DIR / "scaler.joblib")
 ordinal_encoder = joblib.load(MODEL_DIR / "ordinal_encoder.joblib")
 
-
+# CLEANING PREP
 TEXT_COLUMNS = ["product_name_clean", "brands_clean", "main_category_clean",
                 "labels_tags_clean", "ingredients_tags_clean", "nutriscore_clean", "origins_clean"]
 
@@ -54,7 +52,6 @@ for col in TEXT_COLUMNS:
 NUTRI_MAP = {"a":5, "b":4, "c":3, "d":2, "e":1}
 
 
-# LABEL KEYWORDS
 # LABEL KEYWORDS
 LABEL_KEYWORDS = {
     "bio": ["bio", "biologique", "ab", "naturel", "organic"],
