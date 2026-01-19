@@ -1,0 +1,250 @@
+{% extends "base.html" %}
+{% block title %}About | Alternatives{% endblock %}
+{% block content %}
+
+<!-- HERO SPLIT -->
+<section style="
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    background: white;">
+  
+  <div style="
+    background: linear-gradient(135deg, #8DA89F 0%, #6B9E8E 100%);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 12vw;">
+    
+    <h1 style="
+      font-family: 'League Spartan', sans-serif;
+      font-size: 6rem;
+      line-height: 0.9;
+      margin: 0;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      color: white;
+      max-width: 100%;">About</h1>
+  </div>
+  
+  <div style="
+    background: linear-gradient(135deg, #F5F3F0 0%, #FAF9F7 100%);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 12vw;">
+    
+    <p style="
+      font-family: 'Sanchez', sans-serif;
+      font-size: 2rem;
+      line-height: 1.4;
+      margin: 0;
+      color: #333;
+      max-width: 90%;
+      font-weight: 400;">Making sustainable food choices accessible to everyone.</p>
+  </div>
+</section>
+
+
+
+<!-- THE CREATOR - MINIMAL -->
+<section style="
+    background: linear-gradient(135deg, #FAFAF8 0%, #F5F3F0 100%);
+    padding: 15vw 8vw;
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10vw;
+    align-items: center;">
+  
+  <div>
+    <p style="
+      font-family: 'League Spartan', sans-serif;
+      font-size: 0.85rem;
+      color: #8DA89F;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin: 0 0 3rem 0;
+      font-weight: 600;">The Story</p>
+    
+    <h2 style="
+      font-family: 'League Spartan', sans-serif;
+      font-size: 3rem;
+      line-height: 1.1;
+      margin: 0 0 2rem 0;
+      color: #333;
+      font-weight: 700;">Louison Dumont</h2>
+    
+    <p style="
+      font-family: 'Sanchez', sans-serif;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      margin: 0;
+      color: #666;">Third-year student in the multidisciplinary programme at PSL University, specialising in data science and humanities. Passionate about using data to guide decisions, I have combined data analysis and web development to create a tool that helps consumers make better food choices. The project aims to raise consumer awareness and encourage them to make more responsible food choices, while promoting transparency of information.
+    </p>
+  </div>
+  
+  <div style="
+    padding: 4rem;
+    background: white;
+    border-radius: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;">
+    
+    <p style="
+      font-family: 'Sanchez', sans-serif;
+      font-size: 1.2rem;
+      line-height: 1.6;
+      text-align: center;
+      color: #666;
+      margin: 0;">Discover the technical methodology behind the recommendations</p>
+    
+    <div style="display: flex; flex-direction: column; gap: 1rem; width: 100%;">
+      <a href="/work" style="
+        display: inline-block;
+        background: #8DA89F;
+        color: white;
+        padding: 1.5rem 4rem;
+        border-radius: 0;
+        text-decoration: none;
+        font-family: 'League Spartan', sans-serif;
+        font-size: 1rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        transition: all 0.3s ease;
+        border: 2px solid #8DA89F;
+        cursor: pointer;
+        text-align: center;">Explore the Work</a>
+      
+      <a href="/static/CV-Louison Dumont.pdf" download style="
+        display: inline-block;
+        background: transparent;
+        color: #8DA89F;
+        padding: 1.5rem 4rem;
+        border-radius: 0;
+        text-decoration: none;
+        font-family: 'League Spartan', sans-serif;
+        font-size: 1rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        transition: all 0.3s ease;
+        border: 2px solid #8DA89F;
+        cursor: pointer;
+        text-align: center;">Download CV</a>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section style="
+    background: #587A33;
+    padding: 15vw 8vw;
+    margin: 0;">
+  
+  <div style="max-width: 1200px; margin: 0 auto;">
+    <p style="
+      font-family: 'League Spartan', sans-serif;
+      font-size: 0.85rem;
+      color: #8DA89F;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin: 0 0 3rem 0;
+      font-weight: 600;">Process</p>
+    
+    <h2 style="
+      font-family: 'League Spartan', sans-serif;
+      font-size: 3rem;
+      line-height: 1.1;
+      margin: 0 0 6rem 0;
+      color: #333;
+      font-weight: 700;">Three steps to better choices</h2>
+    
+    <div style="
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 6vw;">
+      
+      <div>
+        <h3 style="
+          font-family: 'League Spartan', sans-serif;
+          font-size: 5rem;
+          line-height: 1;
+          color: #E8E6E3;
+          margin: 0 0 2rem 0;
+          font-weight: 700;">01</h3>
+        
+        <p style="
+          font-family: 'League Spartan', sans-serif;
+          font-size: 1.3rem;
+          color: #333;
+          margin: 0 0 1rem 0;
+          font-weight: 700;">Search</p>
+        
+        <p style="
+          font-family: 'Sanchez', sans-serif;
+          font-size: 1rem;
+          color: #999;
+          margin: 0;
+          line-height: 1.7;">Enter any food product from our database of alternatives.</p>
+      </div>
+      
+      <div>
+        <h3 style="
+          font-family: 'League Spartan', sans-serif;
+          font-size: 5rem;
+          line-height: 1;
+          color: #E8E6E3;
+          margin: 0 0 2rem 0;
+          font-weight: 700;">02</h3>
+        
+        <p style="
+          font-family: 'League Spartan', sans-serif;
+          font-size: 1.3rem;
+          color: #333;
+          margin: 0 0 1rem 0;
+          font-weight: 700;">Customize</p>
+        
+        <p style="
+          font-family: 'Sanchez', sans-serif;
+          font-size: 1rem;
+          color: #999;
+          margin: 0;
+          line-height: 1.7;">Set your priorities—nutrition, sustainability, price, labels.</p>
+      </div>
+      
+      <div>
+        <h3 style="
+          font-family: 'League Spartan', sans-serif;
+          font-size: 5rem;
+          line-height: 1;
+          color: #E8E6E3;
+          margin: 0 0 2rem 0;
+          font-weight: 700;">03</h3>
+        
+        <p style="
+          font-family: 'League Spartan', sans-serif;
+          font-size: 1.3rem;
+          color: #333;
+          margin: 0 0 1rem 0;
+          font-weight: 700;">Discover</p>
+        
+        <p style="
+          font-family: 'Sanchez', sans-serif;
+          font-size: 1rem;
+          color: #999;
+          margin: 0;
+          line-height: 1.7;">Get personalized alternatives ranked by your values.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+{% endblock %}

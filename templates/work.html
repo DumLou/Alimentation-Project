@@ -1,0 +1,891 @@
+{% extends "base.html" %}
+{% block title %}Work | Alternatives{% endblock %}
+{% block content %}
+
+<!-- HERO FULL WIDTH AVEC TEXTE PROGRESSIVE -->
+<section style="
+    background: linear-gradient(180deg, white 0%, #F5F3F0 100%);
+    margin: 0;
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;">
+  
+  <div style="max-width: 1400px; margin: 0 auto; padding: 0 8vw;">
+    <p style="
+      font-family: 'League Spartan', sans-serif;
+      font-size: 0.85rem;
+      color: #8DA89F;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin: 0 0 2rem 0;
+      font-weight: 600;">The Project</p>
+    
+    <h1 style="
+      font-family: 'League Spartan', sans-serif;
+      font-size: 6rem;
+      line-height: 0.9;
+      margin: 0 0 2rem 0;
+      font-weight: 700;
+      letter-spacing: -0.05em;
+      color: #333;
+      max-width: 1100px;">Finding alternatives the intelligent way</h1>
+    
+    <p style="
+      font-family: 'Sanchez', sans-serif;
+      font-size: 1.2rem;
+      line-height: 1.7;
+      margin: 0;
+      color: #666;
+      max-width: 700px;
+      font-weight: 400;">Assume that we need a better understanding of the origin of our consumer goods</p>
+  </div>
+</section>
+
+<!-- CHALLENGE & SOLUTION SECTION - UNIFIED -->
+<section style="
+    background: white;
+    margin: 0;
+    width: 100%;">
+  
+  <div style="max-width: 1400px; margin: 0 auto; padding: 8vw;">
+    <div style="
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6vw;
+      margin-bottom: 0;">
+      
+      <!-- PROBLEM -->
+      <div>
+        <div style="
+          display: flex;
+          align-items: flex-start;
+          gap: 1.5rem;
+          margin-bottom: 2rem;">
+          <div style="
+            background: #8DA89F;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-family: 'League Spartan', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            flex-shrink: 0;">P</div>
+          <div>
+            <p style="
+              font-family: 'League Spartan', sans-serif;
+              font-size: 0.7rem;
+              color: #8DA89F;
+              letter-spacing: 0.15em;
+              text-transform: uppercase;
+              margin: 0 0 0.5rem 0;
+              font-weight: 700;">The Challenge</p>
+            <h3 style="
+              font-family: 'League Spartan', sans-serif;
+              font-size: 1.6rem;
+              line-height: 1.1;
+              margin: 0;
+              color: #333;
+              font-weight: 700;">How do you choose responsibly?</h3>
+          </div>
+        </div>
+        
+        <p style="
+          font-family: 'Sanchez', sans-serif;
+          font-size: 0.95rem;
+          line-height: 1.8;
+          margin: 0;
+          color: #666;
+          font-weight: 400;">Most people struggle to find alternatives that truly fit their values. Food choices involve nutrition, sustainability, and ethics—too complex to navigate alone.</p>
+      </div>
+      
+      <!-- SOLUTION -->
+      <div>
+        <div style="
+          display: flex;
+          align-items: flex-start;
+          gap: 1.5rem;
+          margin-bottom: 2rem;">
+          <div style="
+            background: #587A33;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-family: 'League Spartan', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            flex-shrink: 0;">S</div>
+          <div>
+            <p style="
+              font-family: 'League Spartan', sans-serif;
+              font-size: 0.7rem;
+              color: #587A33;
+              letter-spacing: 0.15em;
+              text-transform: uppercase;
+              margin: 0 0 0.5rem 0;
+              font-weight: 700;">Our Approach</p>
+            <h3 style="
+              font-family: 'League Spartan', sans-serif;
+              font-size: 1.6rem;
+              line-height: 1.1;
+              margin: 0;
+              color: #333;
+              font-weight: 700;">Smart recommendations</h3>
+          </div>
+        </div>
+        
+        <p style="
+          font-family: 'Sanchez', sans-serif;
+          font-size: 0.95rem;
+          line-height: 1.8;
+          margin: 0;
+          color: #666;
+          font-weight: 400;">We combine advanced data science to analyze 10,000+ products, understanding deep semantic relationships between foods using machine learning.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS - 3 STEPS ENHANCED -->
+<section style="
+    background: linear-gradient(135deg, rgba(88, 122, 51, 0.03) 0%, rgba(141, 168, 159, 0.03) 100%);
+    margin: 0;
+    border-top: 1px solid #EAEAEA;
+    width: 100%;">
+  
+  <div style="max-width: 1400px; margin: 0 auto; padding: 8vw;">
+    <div style="
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 4rem;">
+      <div>
+        <p style="
+          font-family: 'League Spartan', sans-serif;
+          font-size: 0.75rem;
+          color: #587A33;
+          letter-spacing: 0.2em;
+          text-transform: uppercase;
+          margin: 0 0 1rem 0;
+          font-weight: 700;">The Pipeline</p>
+        <h2 style="
+          font-family: 'League Spartan', sans-serif;
+          font-size: 2.2rem;
+          line-height: 1.1;
+          margin: 0;
+          color: #333;
+          font-weight: 700;">How it works end-to-end</h2>
+      </div>
+    </div>
+    
+    <div style="
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 3vw;
+      position: relative;">
+      
+      <!-- Connecting line background -->
+      <div style="
+        position: absolute;
+        top: 60px;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(to right, transparent, #EAEAEA 10%, #EAEAEA 90%, transparent);
+        z-index: 0;"></div>
+      
+      <!-- Step 1 -->
+      <div style="
+        position: relative;
+        z-index: 1;
+        padding-bottom: 0;">
+        <div style="
+          background: white;
+          padding: 2rem;
+          border-radius: 2px;
+          border: 1px solid #E5E5E5;
+          margin-bottom: 1.5rem;">
+          <div style="
+            background: #8DA89F;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-family: 'League Spartan', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 0 1.5rem 0;">1</div>
+          
+          <h3 style="
+            font-family: 'League Spartan', sans-serif;
+            font-size: 1.2rem;
+            color: #333;
+            margin: 0 0 0.8rem 0;
+            font-weight: 700;">Search</h3>
+          
+          <p style="
+            font-family: 'Sanchez', sans-serif;
+            font-size: 0.9rem;
+            color: #999;
+            margin: 0;
+            line-height: 1.7;">Find any product by name and get instant recommendations</p>
+        </div>
+      </div>
+      
+      <!-- Step 2 -->
+      <div style="
+        position: relative;
+        z-index: 1;
+        padding-bottom: 0;">
+        <div style="
+          background: white;
+          padding: 2rem;
+          border-radius: 2px;
+          border: 1px solid #E5E5E5;
+          margin-bottom: 1.5rem;">
+          <div style="
+            background: #587A33;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-family: 'League Spartan', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 0 1.5rem 0;">2</div>
+          
+          <h3 style="
+            font-family: 'League Spartan', sans-serif;
+            font-size: 1.2rem;
+            color: #333;
+            margin: 0 0 0.8rem 0;
+            font-weight: 700;">Analyze</h3>
+          
+          <p style="
+            font-family: 'Sanchez', sans-serif;
+            font-size: 0.9rem;
+            color: #999;
+            margin: 0;
+            line-height: 1.7;">Our ML model processes the product against 10,000+ from Open Food Facts. An open data published under the Open Database License (ODbL)</p>
+        </div>
+      </div>
+      
+      <!-- Step 3 -->
+      <div style="
+        position: relative;
+        z-index: 1;
+        padding-bottom: 0;">
+        <div style="
+          background: white;
+          padding: 2rem;
+          border-radius: 2px;
+          border: 1px solid #E5E5E5;
+          margin-bottom: 1.5rem;">
+          <div style="
+            background: #64192F;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-family: 'League Spartan', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 0 1.5rem 0;">3</div>
+          
+          <h3 style="
+            font-family: 'League Spartan', sans-serif;
+            font-size: 1.2rem;
+            color: #333;
+            margin: 0 0 0.8rem 0;
+            font-weight: 700;">Discover</h3>
+          
+          <p style="
+            font-family: 'Sanchez', sans-serif;
+            font-size: 0.9rem;
+            color: #999;
+            margin: 0;
+            line-height: 1.7;">Get ranked results with nutrition, sustainability & ethics scores explained</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECHNICAL DEEP DIVE - FULL WIDTH DARK -->
+<section style="
+    background: linear-gradient(135deg, #587A33 0%, #465C28 100%);
+    margin: 0;
+    width: 100%;">
+  
+  <div style="max-width: 1400px; margin: 0 auto; padding: 10vw 8vw;">
+    <p style="
+      font-family: 'League Spartan', sans-serif;
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.6);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin: 0 0 2rem 0;
+      font-weight: 700;">Technology</p>
+    
+    <div style="
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 8vw;
+      align-items: start;">
+      
+      <div>
+        <h2 style="
+          font-family: 'League Spartan', sans-serif;
+          font-size: 3.2rem;
+          line-height: 1.2;
+          margin: 0 0 2.5rem 0;
+          color: white;
+          font-weight: 700;">The engine behind</h2>
+        
+        <ul style="
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 1.8rem;">
+          <li style="
+            font-family: 'Sanchez', sans-serif;
+            font-size: 1rem;
+            color: rgba(255,255,255,0.85);
+            line-height: 1.7;">
+            <strong>SentenceTransformer embeddings</strong> to understand food semantics
+          </li>
+          <li style="
+            font-family: 'Sanchez', sans-serif;
+            font-size: 1rem;
+            color: rgba(255,255,255,0.85);
+            line-height: 1.7;">
+            <strong>Neural networks</strong> trained on product attributes
+          </li>
+          <li style="
+            font-family: 'Sanchez', sans-serif;
+            font-size: 1rem;
+            color: rgba(255,255,255,0.85);
+            line-height: 1.7;">
+            <strong>Nearest Neighbors</strong> with cosine distance for intelligent matching
+          </li>
+          <li style="
+            font-family: 'Sanchez', sans-serif;
+            font-size: 1rem;
+            color: rgba(255,255,255,0.85);
+            line-height: 1.7;">
+            <strong>Ordinal encoding</strong> for food categories and labels
+          </li>
+        </ul>
+      </div>
+      
+      <div style="
+        background: rgba(255,255,255,0.1);
+        padding: 3vw;
+        border-radius: 4px;
+        border-left: 3px solid #8DA89F;">
+        
+        <p style="
+          font-family: 'League Spartan', sans-serif;
+          font-size: 0.75rem;
+          color: rgba(255,255,255,0.5);
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          margin: 0 0 1.5rem 0;
+          font-weight: 700;">Stack</p>
+        
+        <div style="
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 1rem;">
+          <div>
+            <p style="
+              font-family: 'League Spartan', sans-serif;
+              font-size: 0.85rem;
+              color: rgba(255,255,255,0.6);
+              margin: 0 0 0.5rem 0;
+              font-weight: 600;">Python + scikit-learn</p>
+            <p style="
+              font-family: 'Sanchez', sans-serif;
+              font-size: 0.9rem;
+              color: rgba(255,255,255,0.75);
+              margin: 0;
+              line-height: 1.6;">Data preprocessing, encoding, scaling</p>
+          </div>
+          <div>
+            <p style="
+              font-family: 'League Spartan', sans-serif;
+              font-size: 0.85rem;
+              color: rgba(255,255,255,0.6);
+              margin: 0 0 0.5rem 0;
+              font-weight: 600;">Flask backend</p>
+            <p style="
+              font-family: 'Sanchez', sans-serif;
+              font-size: 0.9rem;
+              color: rgba(255,255,255,0.75);
+              margin: 0;
+              line-height: 1.6;">API routes, request handling</p>
+          </div>
+          <div>
+            <p style="
+              font-family: 'League Spartan', sans-serif;
+              font-size: 0.85rem;
+              color: rgba(255,255,255,0.6);
+              margin: 0 0 0.5rem 0;
+              font-weight: 600;">HTML/CSS frontend</p>
+            <p style="
+              font-family: 'Sanchez', sans-serif;
+              font-size: 0.9rem;
+              color: rgba(255,255,255,0.75);
+              margin: 0;
+              line-height: 1.6;">Interactive search & results</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECHNICAL DEEP DIVE - HOW EACH COMPONENT WORKS -->
+<section style="
+    background: white;
+    margin: 0;
+    width: 100%;">
+  
+  <div style="max-width: 1400px; margin: 0 auto; padding: 10vw 8vw;">
+    <p style="
+      font-family: 'League Spartan', sans-serif;
+      font-size: 0.75rem;
+      color: #587A33;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin: 0 0 1.5rem 0;
+      font-weight: 700;">Deep Dive</p>
+    
+    <h2 style="
+      font-family: 'League Spartan', sans-serif;
+      font-size: 2.8rem;
+      line-height: 1.1;
+      margin: 0 0 5rem 0;
+      color: #333;
+      font-weight: 700;
+      max-width: 900px;">How our intelligence works</h2>
+    
+    <!-- Component Headers -->
+    <div style="
+      display: grid;
+      grid-template-columns: 0.5fr 1.5fr 2fr 2fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 2px dotted #EAEAEA;
+      align-items: start;">
+      
+      <div style="
+        font-family: 'League Spartan', sans-serif;
+        font-size: 0.75rem;
+        color: #999;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        font-weight: 700;">Step</div>
+      
+      <div style="
+        font-family: 'League Spartan', sans-serif;
+        font-size: 0.75rem;
+        color: #999;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        font-weight: 700;">Component</div>
+      
+      <div style="
+        font-family: 'League Spartan', sans-serif;
+        font-size: 0.75rem;
+        color: #999;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        font-weight: 700;">What it does</div>
+      
+      <div style="
+        font-family: 'League Spartan', sans-serif;
+        font-size: 0.75rem;
+        color: #999;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        font-weight: 700;">Result</div>
+    </div>
+    
+    <!-- Component 1 -->
+    <div style="
+      display: grid;
+      grid-template-columns: 0.5fr 1.5fr 2fr 2fr;
+      gap: 2rem;
+      padding-bottom: 2rem;
+      margin-bottom: 2rem;
+      border-bottom: 1px dotted #EAEAEA;
+      align-items: start;">
+      
+      <div style="
+        display: flex;
+        justify-content: center;
+        padding-top: 0.3rem;">
+        <div style="
+          background: #8DA89F;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-family: 'League Spartan', sans-serif;
+          font-size: 1.2rem;
+          font-weight: 700;">1</div>
+      </div>
+      
+      <div>
+        <h3 style="
+          font-family: 'League Spartan', sans-serif;
+          font-size: 1.1rem;
+          color: #333;
+          margin: 0;
+          font-weight: 700;
+          line-height: 1.3;">Semantic<br/>Understanding</h3>
+      </div>
+      
+      <div>
+        <p style="
+          font-family: 'Sanchez', sans-serif;
+          font-size: 0.9rem;
+          color: #666;
+          margin: 0;
+          line-height: 1.6;">Converts product names, ingredients, brands, categories into semantic vectors using <strong>all-MiniLM-L6-v2</strong> model (384 dimensions).</p>
+        <div style="
+          margin-top: 1rem;
+          padding-top: 1rem;
+          border-top: 1px dotted #E5E5E5;">
+          <p style="
+            font-family: 'League Spartan', sans-serif;
+            font-size: 0.7rem;
+            color: #8DA89F;
+            margin: 0 0 0.5rem 0;
+            font-weight: 700;
+            text-transform: uppercase;">Weights</p>
+          <div style="
+            font-family: 'Sanchez', sans-serif;
+            font-size: 0.8rem;
+            color: #333;
+            line-height: 1.6;">
+            Ingredients 2.0× • Name 1.5× • Category 1.0× • Brand 0.8×
+          </div>
+        </div>
+      </div>
+      
+      <div style="
+        background: linear-gradient(135deg, rgba(141, 168, 159, 0.08) 0%, rgba(141, 168, 159, 0.12) 100%);
+        padding: 1.5rem;
+        border-radius: 1px;
+        text-align: center;">
+        <p style="
+          font-family: 'League Spartan', sans-serif;
+          font-size: 2.2rem;
+          color: #8DA89F;
+          margin: 0 0 0.5rem 0;
+          font-weight: 700;">1536D</p>
+        <p style="
+          font-family: 'Sanchez', sans-serif;
+          font-size: 0.85rem;
+          color: #666;
+          margin: 0;
+          line-height: 1.5;"><strong>Semantic</strong> product essence</p>
+      </div>
+    </div>
+    
+    <!-- Component 2 -->
+    <div style="
+      display: grid;
+      grid-template-columns: 0.5fr 1.5fr 2fr 2fr;
+      gap: 2rem;
+      padding-bottom: 2rem;
+      margin-bottom: 2rem;
+      border-bottom: 1px dotted #EAEAEA;
+      align-items: start;">
+      
+      <div style="
+        display: flex;
+        justify-content: center;
+        padding-top: 0.3rem;">
+        <div style="
+          background: #587A33;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-family: 'League Spartan', sans-serif;
+          font-size: 1.2rem;
+          font-weight: 700;">2</div>
+      </div>
+      
+      <div>
+        <h3 style="
+          font-family: 'League Spartan', sans-serif;
+          font-size: 1.1rem;
+          color: #333;
+          margin: 0;
+          font-weight: 700;
+          line-height: 1.3;">Attribute<br/>Encoding</h3>
+      </div>
+      
+      <div>
+        <p style="
+          font-family: 'Sanchez', sans-serif;
+          font-size: 0.9rem;
+          color: #666;
+          margin: 0 0 0.8rem 0;
+          line-height: 1.6;"><strong>Numeric:</strong> Carbon footprint, environmental scores → StandardScaler (0-1)</p>
+        <p style="
+          font-family: 'Sanchez', sans-serif;
+          font-size: 0.9rem;
+          color: #666;
+          margin: 0;
+          line-height: 1.6;"><strong>Ordinal:</strong> Nutriscore, Nova group, grades → OrdinalEncoder</p>
+      </div>
+      
+      <div style="
+        background: linear-gradient(135deg, rgba(88, 122, 51, 0.08) 0%, rgba(88, 122, 51, 0.12) 100%);
+        padding: 1.5rem;
+        border-radius: 1px;
+        text-align: center;">
+        <p style="
+          font-family: 'Sanchez', sans-serif;
+          font-size: 0.85rem;
+          color: #666;
+          margin: 0;
+          line-height: 1.5;"><strong>Hierarchies</strong><br/>preserved</p>
+      </div>
+    </div>
+    
+    <!-- Component 3 -->
+    <div style="
+      display: grid;
+      grid-template-columns: 0.5fr 1.5fr 2fr 2fr;
+      gap: 2rem;
+      padding-bottom: 2rem;
+      margin-bottom: 2rem;
+      border-bottom: 1px dotted #EAEAEA;
+      align-items: start;">
+      
+      <div style="
+        display: flex;
+        justify-content: center;
+        padding-top: 0.3rem;">
+        <div style="
+          background: #64192F;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-family: 'League Spartan', sans-serif;
+          font-size: 1.2rem;
+          font-weight: 700;">3</div>
+      </div>
+      
+      <div>
+        <h3 style="
+          font-family: 'League Spartan', sans-serif;
+          font-size: 1.1rem;
+          color: #333;
+          margin: 0;
+          font-weight: 700;
+          line-height: 1.3;">Smart<br/>Matching</h3>
+      </div>
+      
+      <div>
+        <p style="
+          font-family: 'Sanchez', sans-serif;
+          font-size: 0.9rem;
+          color: #666;
+          margin: 0 0 0.8rem 0;
+          line-height: 1.6;">Nearest Neighbors with <strong>cosine distance</strong> finds 400 most similar products. Measures angular distance in high-dimensional space.</p>
+        <div style="
+          margin-top: 1rem;
+          padding-top: 1rem;
+          border-top: 1px dotted #E5E5E5;">
+          <p style="
+            font-family: 'League Spartan', sans-serif;
+            font-size: 0.7rem;
+            color: #64192F;
+            margin: 0 0 0.5rem 0;
+            font-weight: 700;
+            text-transform: uppercase;">Thresholds</p>
+          <div style="
+            font-family: 'Sanchez', sans-serif;
+            font-size: 0.8rem;
+            color: #333;
+            line-height: 1.6;">
+            L1: 0.2 • L3: 0.6 • L5: 0.8
+          </div>
+        </div>
+      </div>
+      
+      <div style="
+        background: linear-gradient(135deg, rgba(100, 25, 47, 0.08) 0%, rgba(100, 25, 47, 0.12) 100%);
+        padding: 1.5rem;
+        border-radius: 1px;
+        text-align: center;">
+        <p style="
+          font-family: 'Sanchez', sans-serif;
+          font-size: 0.85rem;
+          color: #666;
+          margin: 0;
+          line-height: 1.5;"><strong>Ranked</strong><br/>candidates</p>
+      </div>
+    </div>
+    
+    <!-- Component 4 -->
+    <div style="
+      display: grid;
+      grid-template-columns: 0.5fr 1.5fr 2fr 2fr;
+      gap: 2rem;
+      align-items: start;">
+      
+      <div style="
+        display: flex;
+        justify-content: center;
+        padding-top: 0.3rem;">
+        <div style="
+          background: #a38c58;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-family: 'League Spartan', sans-serif;
+          font-size: 1.2rem;
+          font-weight: 700;">4</div>
+      </div>
+      
+      <div>
+        <h3 style="
+          font-family: 'League Spartan', sans-serif;
+          font-size: 1.1rem;
+          color: #333;
+          margin: 0;
+          font-weight: 700;
+          line-height: 1.3;">Label<br/>Categorization</h3>
+      </div>
+      
+      <div>
+        <p style="
+          font-family: 'Sanchez', sans-serif;
+          font-size: 0.9rem;
+          color: #666;
+          margin: 0 0 0.8rem 0;
+          line-height: 1.6;">Regex-based detection recognizes 8 label categories: Bio, Vegan, Vegetarian, Good Nutriscore, No Additives, Sustainable, Quality Labels, Gluten-free.</p>
+        <div style="
+          margin-top: 1rem;
+          padding-top: 1rem;
+          border-top: 1px dotted #E5E5E5;">
+          <p style="
+            font-family: 'League Spartan', sans-serif;
+            font-size: 0.7rem;
+            color: #8DA89F;
+            margin: 0 0 0.5rem 0;
+            font-weight: 700;
+            text-transform: uppercase;">Hierarchy</p>
+          <div style="
+            font-family: 'Sanchez', sans-serif;
+            font-size: 0.8rem;
+            color: #333;
+            line-height: 1.6;">
+            A(5) → B(4) → C(3) → D(2) → E(1)
+          </div>
+        </div>
+      </div>
+      
+      <div style="
+        background: linear-gradient(135deg, rgba(209, 178, 85, 0.08) 0%, rgba(128, 126, 73, 0.12) 100%);
+        padding: 1.5rem;
+        border-radius: 1px;
+        text-align: center;">
+        <p style="
+          font-family: 'Sanchez', sans-serif;
+          font-size: 0.85rem;
+          color: #666666;
+          margin: 0;
+          line-height: 1.5;"><strong>Filtered</strong><br/>results</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY IT MATTERS - CENTERED BREATHING -->
+<section style="
+    background: linear-gradient(135deg, rgba(88, 122, 51, 0.02) 0%, rgba(141, 168, 159, 0.02) 100%);
+    padding: 8vw;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 50vh;">
+  
+  <div style="max-width: 900px; text-align: center;">
+    <p style="
+      font-family: 'League Spartan', sans-serif;
+      font-size: 0.75rem;
+      color: #587A33;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin: 0 0 2rem 0;
+      font-weight: 700;">The Impact</p>
+    
+    <h2 style="
+      font-family: 'League Spartan', sans-serif;
+      font-size: 2.8rem;
+      line-height: 1.4;
+      margin: 0;
+      color: #333;
+      font-weight: 700;">It transforms consuming into a conscious gesture</h2>
+    
+    <p style="
+      font-family: 'Sanchez', sans-serif;
+      font-size: 1rem;
+      line-height: 1.8;
+      margin: 2rem 0 0 0;
+      color: #666;
+      font-weight: 400;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;">By combining semantic AI, intelligent matching, and transparent labeling, we empower individuals to align their food choices with their values—nutrition, sustainability, ethics, and taste.</p>
+  </div>
+</section>
+
+
+{% endblock %}
+

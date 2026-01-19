@@ -1,0 +1,361 @@
+{% extends "base.html" %}
+{% block title %}Accueil | Alternatives{% endblock %}
+
+{% block content %}
+
+<!-- HERO SECTION -->
+<section style="
+    background:#8DA89F;
+    padding:0;
+    margin:0;
+    width:100%;
+    box-sizing:border-box;
+    min-height:55vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:flex-start;
+    position:relative;
+    overflow:hidden;">
+  
+  <!-- Background shadow decoration image -->
+  <div style="
+    position:absolute;
+    top:5%;
+    right:-30%;
+    width:1200px;
+    height:1200px;
+    background-image:url('/static/shadow3.png');
+    background-position:middle;
+    background-repeat:no-repeat;
+    background-size:contain;
+    pointer-events:none;
+    z-index:1;"></div>
+  
+  <!-- Content container with z-index above shadow -->
+  <div style="
+    max-width:800px;
+    padding:3rem 5vw;
+    padding-right:0;
+    position:relative;
+    z-index:2;">
+
+    <!-- Main title part 1 - "ALTER-" -->
+    <h1 style="
+      font-family:'League Spartan',sans-serif;
+      font-size:9.5rem;
+      color:#587A33;
+      line-height:0.85;
+      margin:0;
+      letter-spacing:-0.065em;
+      font-weight:700;
+      margin-bottom:-0.8rem;">
+      ALTER-
+    </h1>
+    
+    <!-- Main title part 2 - "NATive," -->
+    <h1 style="
+      font-family:'League Spartan',sans-serif;
+      font-size:9.5rem;
+      color:#587A33;
+      line-height:0.85;
+      margin:0;
+      letter-spacing:-0.070em;
+      font-weight:700;
+      margin-bottom:0.5rem;">
+      NATive,
+    </h1>
+    
+    <!-- Subtitle with sustainability message -->
+    <h2 style="
+      font-family:'League Spartan',sans-serif;
+      font-size:4.5rem;
+      color:#587A33;
+      line-height:0.95;
+      margin:0;
+      font-weight:700;
+      text-align:right;
+      margin-bottom:0.80rem;
+      letter-spacing:-0.05em;">
+      for a more<br>sustainable food<br>system
+    </h2>
+    
+    <!-- Description tagline -->
+    <p style="
+      font-family:'Sanchez',sans-serif;
+      font-size:2rem;
+      color:#587A33;
+      letter-spacing:0.1em;
+      font-weight:200;
+      margin:0;
+      text-align:left;
+      text-transform:uppercase;">
+      Recommendation template
+    </p>
+  </div>
+  
+</section>
+
+<!-- SERVICES SECTION -->
+<section style="
+    background:#64192F;
+    padding:6rem 3vw;
+    color:#fff;
+    margin:0;
+    width:100%;
+    box-sizing:border-box;
+    min-height:70vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    position:relative;
+    overflow:hidden;">
+  
+  <!-- Background shadow decoration image -->
+  <div style="
+    position:absolute;
+    top:-20%;
+    right:-5%;
+    width:1500px;
+    height:1000px;
+    background-image:url('/static/shadow-bg.png');
+    background-position:center;
+    background-repeat:no-repeat;
+    background-size:contain;
+    pointer-events:none;
+    z-index:1;"></div>
+  
+  <!-- Content container with z-index above shadow -->
+  <div style="
+    max-width:900px;
+    margin:0 auto;
+    width:100%;
+    position:relative;
+    z-index:2;">
+    
+    <!-- Section title with large number "1" -->
+    <div style="
+      display:flex;
+      align-items:center;
+      margin-bottom:6rem;
+      gap:2rem;">
+      <span style="
+        font-family:'Ultra',sans-serif;
+        font-size:8rem;
+        color:#fff;
+        line-height:0.8;">1</span>
+      <h3 style="
+        font-family:'League Spartan',sans-serif;
+        font-size:4rem;
+        color:#fff;
+        margin:0;
+        font-weight:400;
+        line-height:1;">Services</h3>
+    </div>
+    
+    <!-- Three-column services grid -->
+    <div style="
+      display:flex;
+      flex-direction:row;
+      justify-content:space-between;
+      gap:2.5rem;
+      text-align:center;
+      align-items:stretch;">
+      
+      <!-- Service card 1: Product Analysis -->
+      <div style="
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        flex:1;
+        padding:0 1.5rem;
+        border-right:1px solid rgba(255,255,255,0.2);">
+        <h4 style="
+          font-family:'Sanchez',sans-serif;
+          font-size:1.5rem;
+          color:#fff;
+          margin-bottom:2rem;
+          font-weight:400;
+          letter-spacing:0.05em;">Product analysis</h4>
+        <p style="
+          font-family:'League Spartan',sans-serif;
+          font-size:1.1rem;
+          color:#fff;
+          line-height:1.95;
+          margin:0;
+          font-weight:300;
+          letter-spacing:-0.01em;">Offer alternatives based on individual nutritional preferences and needs.</p>
+      </div>
+      
+      <!-- Service card 2: Personalized Recommendations -->
+      <div style="
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        flex:1;
+        padding:0 1.5rem;
+        border-right:1px solid rgba(255,255,255,0.2);">
+        <h4 style="
+          font-family:'Sanchez',sans-serif;
+          font-size:1.5rem;
+          color:#fff;
+          margin-bottom:2rem;
+          font-weight:400;
+          letter-spacing:0.05em;">Personalized recommendations</h4>
+        <p style="
+          font-family:'League Spartan',sans-serif;
+          font-size:1.1rem;
+          color:#fff;
+          line-height:1.95;
+          margin:0;
+          font-weight:300;
+          letter-spacing:-0.01em;">Choose your preferences to get tailored product suggestions.</p>
+      </div>
+      
+      <!-- Service card 3: Find Out More -->
+      <div style="
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        flex:1;
+        padding:0 1.5rem;">
+        <h4 style="
+          font-family:'Sanchez',sans-serif;
+          font-size:1.5rem;
+          color:#fff;
+          margin-bottom:2rem;
+          font-weight:400;
+          letter-spacing:0.05em;">Find out more</h4>
+        <p style="
+          font-family:'League Spartan',sans-serif;
+          font-size:1.1rem;
+          color:#fff;
+          line-height:1.95;
+          margin:0;
+          font-weight:300;
+          letter-spacing:-0.01em;">Highlighting the origin of our consumer goods.</p>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS SECTION - Explains the 3 simple steps to use the platform -->
+<section style="
+    background:#64192F;
+    padding:6rem 3vw;
+    color:#fff;
+    margin:0;
+    width:100%;
+    box-sizing:border-box;
+    min-height:65vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    position:relative;
+    overflow:hidden;">
+  
+  <!-- Background shadow decoration image -->
+  <div style="
+    position:absolute;
+    bottom:5%;
+    left:-5%;
+    width:1000px;
+    height:1000px;
+    background-image:url('/static/shadow2.png');
+    background-position:center;
+    background-repeat:no-repeat;
+    background-size:contain;
+    pointer-events:none;
+    z-index:1;"></div>
+    
+  <!-- Content container -->
+  <div style="
+    max-width:800px;
+    margin:0 auto;
+    width:100%;
+    position:relative;
+    z-index:2;">
+    
+    <!-- Section title with large number "2" -->
+    <div style="
+      display:flex;
+      align-items:center;
+      margin-bottom:6rem;
+      gap:2rem;">
+      <span style="
+        font-family:'Ultra',sans-serif;
+        font-size:8rem;
+        color:#fff;
+        line-height:0.8;">2</span>
+      <h3 style="
+        font-family:'League Spartan',sans-serif;
+        font-size:4rem;
+        color:#fff;
+        margin:0;
+        font-weight:400;
+        line-height:1;">How it works?</h3>
+    </div>
+    
+    <!-- Three-step process description -->
+    <div style="
+      display:flex;
+      flex-direction:column;
+      gap:2rem;
+      margin-bottom:4rem;
+      text-align:right;
+      margin-right:2rem;">
+      
+      <!-- Step 1: Enter product -->
+      <p style="
+        font-family:'League Spartan',sans-serif;
+        font-size:1.15rem;
+        color:#fff;
+        line-height:1.9;
+        margin:0;
+        font-weight:500;">Enter a product you consume.</p>
+      
+      <!-- Step 2: Adjust criteria -->
+      <p style="
+        font-family:'League Spartan',sans-serif;
+        font-size:1.15rem;
+        color:#fff;
+        line-height:1.9;
+        margin:0;
+        font-weight:500;">Adjust the criteria according to your preferences (category, labels, Nutriscore, environment).</p>
+      
+      <!-- Step 3: Discover alternatives -->
+      <p style="
+        font-family:'League Spartan',sans-serif;
+        font-size:1.15rem;
+        color:#fff;
+        line-height:1.9;
+        margin:0;
+        font-weight:500;">Discover personalized alternatives, ranked according to your choices!</p>
+    </div>
+    
+    <!-- Call-to-action button linking to search page -->
+    <div style="
+      margin-top:3rem;
+      text-align:center;">
+      <a href="/research" style="
+        background:#8DA89F;
+        color:#fff;
+        padding:1.2rem 3.5rem;
+        border-radius:999px;
+        text-decoration:none;
+        font-weight:400;
+        font-size:1.1rem;
+        display:inline-block;
+        transition:all 0.3s;
+        border:none;
+        font-family:'Sanchez',sans-serif;
+        letter-spacing:0.05em;">
+        START A RESEARCH
+      </a>
+    </div>
+    
+  </div>
+</section>
+
+{% endblock %}

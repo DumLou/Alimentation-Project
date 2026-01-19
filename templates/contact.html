@@ -1,0 +1,224 @@
+{% extends "base.html" %}
+{% block title %}Contact | Alternatives{% endblock %}
+{% block content %}
+
+<!-- ========================================
+     CONTACT SECTION - Minimalist contact form
+     Get in touch with our team for inquiries
+     ======================================== -->
+<section style="
+    background:linear-gradient(135deg, #fff5f0 0%, #fef9f7 100%);
+    padding:8rem 3vw;
+    min-height:100vh;
+    margin:0;
+    width:100%;
+    box-sizing:border-box;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    overflow:hidden;">
+  
+  <!-- Decorative background accent -->
+  <div style="
+    position:absolute;
+    top:-5%;
+    right:-5%;
+    width:500px;
+    height:500px;
+    background:radial-gradient(circle, rgba(235, 135, 63, 0.08) 0%, transparent 70%);
+    border-radius:50%;
+    pointer-events:none;"></div>
+  
+  <!-- Contact form container -->
+  <div style="
+    max-width:580px;
+    width:100%;
+    background:#fff;
+    padding:3.5rem;
+    border-radius:16px;
+    box-shadow:0 8px 32px rgba(194, 119, 153, 0.1);
+    border:2px solid rgba(235, 135, 63, 0.15);
+    position:relative;
+    z-index:10;">
+    
+    <!-- Page title -->
+    <h1 style="
+      font-family:'League Spartan',sans-serif;
+      font-size:3.5rem;
+      background:linear-gradient(135deg, #EB873F 0%, #C27799 100%);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      background-clip:text;
+      margin:0 0 0.8rem 0;
+      font-weight:700;
+      letter-spacing:-0.03em;
+      line-height:1.1;">Get In Touch</h1>
+    
+    <!-- Subtitle/description -->
+    <p style="
+      font-family:'Sanchez',sans-serif;
+      font-size:1.1rem;
+      color:#555;
+      margin:0 0 2.8rem 0;
+      line-height:1.7;
+      font-weight:300;">Have a question or suggestion? We'd love to hear from you. Drop us a message and we'll get back to you soon.</p>
+    
+    <!-- Contact form -->
+    <form method="POST" style="
+      display:flex;
+      flex-direction:column;
+      gap:2rem;">
+      
+      <!-- Name input field -->
+      <div>
+        <label style="
+          font-family:'League Spartan',sans-serif;
+          font-size:0.9rem;
+          background:linear-gradient(135deg, #EB873F 0%, #C27799 100%);
+          -webkit-background-clip:text;
+          -webkit-text-fill-color:transparent;
+          background-clip:text;
+          display:block;
+          margin-bottom:0.8rem;
+          font-weight:600;
+          letter-spacing:0.08em;
+          text-transform:uppercase;">Full Name</label>
+        <input type="text" name="name" placeholder="John Doe" required style="
+          padding:1.1rem 1.2rem;
+          border-radius:10px;
+          border:2px solid #EB873F;
+          background:#fff;
+          color:#1a1a1a;
+          font-family:'Sanchez',sans-serif;
+          font-size:1rem;
+          width:100%;
+          box-sizing:border-box;
+          transition:all 0.3s ease;">
+      </div>
+      
+      <!-- Email input field -->
+      <div>
+        <label style="
+          font-family:'League Spartan',sans-serif;
+          font-size:0.9rem;
+          background:linear-gradient(135deg, #EB873F 0%, #C27799 100%);
+          -webkit-background-clip:text;
+          -webkit-text-fill-color:transparent;
+          background-clip:text;
+          display:block;
+          margin-bottom:0.8rem;
+          font-weight:600;
+          letter-spacing:0.08em;
+          text-transform:uppercase;">Email Address</label>
+        <input type="email" name="email" placeholder="your@email.com" required style="
+          padding:1.1rem 1.2rem;
+          border-radius:10px;
+          border:2px solid #EB873F;
+          background:#fff;
+          color:#1a1a1a;
+          font-family:'Sanchez',sans-serif;
+          font-size:1rem;
+          width:100%;
+          box-sizing:border-box;
+          transition:all 0.3s ease;">
+      </div>
+      
+      <!-- Subject field -->
+      <div>
+        <label style="
+          font-family:'League Spartan',sans-serif;
+          font-size:0.9rem;
+          background:linear-gradient(135deg, #EB873F 0%, #C27799 100%);
+          -webkit-background-clip:text;
+          -webkit-text-fill-color:transparent;
+          background-clip:text;
+          display:block;
+          margin-bottom:0.8rem;
+          font-weight:600;
+          letter-spacing:0.08em;
+          text-transform:uppercase;">Subject</label>
+        <input type="text" name="subject" placeholder="What is this about?" required style="
+          padding:1.1rem 1.2rem;
+          border-radius:10px;
+          border:2px solid #EB873F;
+          background:#fff;
+          color:#1a1a1a;
+          font-family:'Sanchez',sans-serif;
+          font-size:1rem;
+          width:100%;
+          box-sizing:border-box;
+          transition:all 0.3s ease;">
+      </div>
+      
+      <!-- Message textarea field -->
+      <div>
+        <label style="
+          font-family:'League Spartan',sans-serif;
+          font-size:0.9rem;
+          background:linear-gradient(135deg, #EB873F 0%, #C27799 100%);
+          -webkit-background-clip:text;
+          -webkit-text-fill-color:transparent;
+          background-clip:text;
+          display:block;
+          margin-bottom:0.8rem;
+          font-weight:600;
+          letter-spacing:0.08em;
+          text-transform:uppercase;">Message</label>
+        <textarea name="message" placeholder="Tell us more about your inquiry..." rows="7" required style="
+          padding:1.1rem 1.2rem;
+          border-radius:10px;
+          border:2px solid #EB873F;
+          background:#fff;
+          color:#1a1a1a;
+          font-family:'Sanchez',sans-serif;
+          font-size:1rem;
+          width:100%;
+          box-sizing:border-box;
+          resize:vertical;
+          transition:all 0.3s ease;
+          line-height:1.6;"></textarea>
+      </div>
+      
+      <!-- Submit button with gradient -->
+      <button type="submit" style="
+        background:linear-gradient(135deg, #EB873F 0%, #C27799 100%);
+        color:#fff;
+        padding:1.2rem 2.5rem;
+        border-radius:10px;
+        border:none;
+        font-family:'League Spartan',sans-serif;
+        font-weight:600;
+        font-size:1.05rem;
+        cursor:pointer;
+        margin-top:0.5rem;
+        letter-spacing:0.08em;
+        transition:all 0.3s ease;
+        text-transform:uppercase;
+        box-shadow:0 4px 15px rgba(235, 135, 63, 0.3);
+        position:relative;
+        overflow:hidden;">
+        <span style="position:relative;z-index:2;">Send Message</span>
+      </button>
+    </form>
+    
+    <!-- Success message with gradient -->
+    {% if success %}
+      <div style="
+        background:linear-gradient(135deg, rgba(235, 135, 63, 0.1) 0%, rgba(194, 119, 153, 0.1) 100%);
+        color:#C27799;
+        padding:1.5rem;
+        border-radius:10px;
+        margin-top:2rem;
+        font-family:'League Spartan',sans-serif;
+        font-weight:600;
+        text-align:center;
+        border-left:4px solid #EB873F;
+        font-size:1.05rem;">
+        ✓ Thank you for your message! We'll get back to you very soon.
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% endblock %}
