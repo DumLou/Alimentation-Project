@@ -9,3 +9,4 @@ python-dotenv==1.0.0
 gdown==5.1.0
 torch>=2.0.0
 gunicorn==21.2.0
+fastparquet>=2.0.0
