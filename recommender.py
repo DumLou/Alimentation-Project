@@ -9,42 +9,51 @@ import gdown
 import zipfile
 from pathlib import Path
 from sklearn.neighbors import NearestNeighbors
+from sklearn.metrics.pairwise import cosine_distances
 
 # SETUP PATHS AND DOWNLOAD/EXTRACT MODELS
 BASE_DIR = Path(__file__).resolve().parent
 MODEL_DIR = BASE_DIR / "models"
-MODEL_DIR.mkdir(exist_ok=True)  # Create if not exists
+MODEL_DIR.mkdir(parents=True, exist_ok=True)  # Ensure the directory exists to avoid FileNotFoundError
 
 ZIP_ID = "1z5RsjM7pxHJ_0FjNiLcdF7WJYYYbH7H0"
 ZIP_PATH = BASE_DIR / "models.zip"
 
-# Download ZIP if not exists
+# Download the ZIP file from Google Drive if it's not already on the server
 if not ZIP_PATH.exists():
-    print("Téléchargement du ZIP models via gdown…")
-    gdown.download(
-        id=ZIP_ID,
-        output=str(ZIP_PATH),
-        quiet=False
-    )
+    print("Downloading models ZIP from Google Drive via gdown...")
+    gdown.download(id=ZIP_ID, output=str(ZIP_PATH), quiet=False)
 
-# Dezip if model directory is empty
-if not any(MODEL_DIR.iterdir()):
-    print("Extraction des modèles...")
+# Extract models if the main data file (parquet) is missing
+if not (MODEL_DIR / "products.parquet").exists():
+    print("Extracting models from ZIP...")
     with zipfile.ZipFile(ZIP_PATH, "r") as zip_ref:
-        # Check each member
-        for member in zip_ref.namelist():
-            # Extract only files, ignore directories
-            filename = Path(member).name
-            if filename:  # Non-empty means it's a file
-                target_path = MODEL_DIR / filename
-                with zip_ref.open(member) as source, open(target_path, "wb") as target:
-                    target.write(source.read())
-    print("✓ Modèles extraits avec succès")
+        # Extract everything directly into MODEL_DIR
+        zip_ref.extractall(MODEL_DIR)
+    
+    # Bug fix: If the zip created an extra 'models/' subfolder, move files to the parent directory
+    internal_folder = MODEL_DIR / "models"
+    if internal_folder.exists():
+        import shutil
+        for file_path in internal_folder.iterdir():
+            shutil.move(str(file_path), str(MODEL_DIR / file_path.name))
+        print("✓ Files moved from subfolder to root MODEL_DIR")
+    
+    print("✓ Models extracted successfully")
 
-# Load data and models
-df = pd.read_parquet(MODEL_DIR / "products.parquet")
-X_final = joblib.load(MODEL_DIR / "embeddings.joblib")
-nn_model = joblib.load(MODEL_DIR / "nn_model.joblib")
+# Define paths for loading to ensure absolute reference
+path_parquet = MODEL_DIR / "products.parquet"
+path_embeddings = MODEL_DIR / "embeddings.joblib"
+path_nn = MODEL_DIR / "nn_model.joblib"
+
+# Final safety check before loading
+if not path_parquet.exists():
+    raise FileNotFoundError(f"CRITICAL ERROR: {path_parquet} was not found after extraction.")
+
+# Load data and models into memory
+df = pd.read_parquet(path_parquet)
+X_final = joblib.load(path_embeddings)
+nn_model = joblib.load(path_nn)
 
 
 # Text cleaning 
@@ -57,6 +66,50 @@ for col in TEXT_COLUMNS:
 # Attributes to numeric mappings and thresholds
 NUTRI_MAP = {"a": 5, "b": 4, "c": 3, "d": 2, "e": 1}
 SIMILARITY_THRESHOLDS = {1: 0.2, 2: 0.4, 3: 0.6, 4: 0.7, 5: 0.8}
+
+# Product type keywords for smart detection
+ANIMAL_PRODUCTS = {
+    "meat": ["meat", "chicken", "beef", "pork", "lamb", "turkey", "veal", "viande", "poulet", "boeuf", "porc"],
+    "fish": ["fish", "salmon", "tuna", "cod", "trout", "poisson", "saumon", "thon", "morue"],
+    "dairy": ["milk", "cheese", "yogurt", "butter", "cream", "fromage", "lait", "yaourt", "crème", "beurre"],
+    "egg": ["egg", "œuf", "eggs", "œufs"]
+}
+
+VEGAN_REPLACEMENTS = {
+    "meat": ["tofu", "tempeh", "seitan", "lentil", "pea", "bean", "légumineuse", "protéine végétale"],
+    "fish": ["algae", "seaweed", "tofu", "tempeh", "algue"],
+    "dairy": ["almond milk", "soy milk", "oat milk", "coconut milk", "lait d'amande", "lait de soja", "lait d'avoine"],
+    "egg": ["flax", "chia", "egg replacement", "lin", "chia"]
+}
+
+def detect_product_type(product_name: str, category: str):
+    """DDetect the product type (meat, fish, dairy, egg)"""
+    text = f"{product_name} {category}".lower()
+    for ptype, keywords in ANIMAL_PRODUCTS.items():
+        for kw in keywords:
+            if kw in text:
+                return ptype
+    return None
+
+def is_vegan_replacement(product_name: str, product_type: str):
+    """ Check if product_name is a vegan replacement for the given product_type """
+    if not product_type or product_type not in VEGAN_REPLACEMENTS:
+        return False
+    text = product_name.lower()
+    for kw in VEGAN_REPLACEMENTS[product_type]:
+        if kw in text:
+            return True
+    return False
+
+# Vegan ingredient patterns for regex matching
+VEGAN_INGREDIENTS_REGEX = r"(soja|soy|tofu|tempeh|seitan|lentil|lentille|pois|pea|beans|legumineuse|vegetal|cereal|riz|ble|avoine|oat|lupini|pois-chiche|chickpea|feve)"
+
+def has_vegan_ingredients(ingredients_text):
+    """Check if ingredients contain vegan protein sources using regex"""
+    if not isinstance(ingredients_text, str) or ingredients_text.strip() == "":
+        return False
+    text = ingredients_text.lower()
+    return bool(re.search(VEGAN_INGREDIENTS_REGEX, text))
 
 # Label keywords to facilitate detection. List based on common labels found in the dataset.
 LABEL_KEYWORDS = {
@@ -176,14 +229,66 @@ def recommend_products_web(df, nn_model, X_final, product_id, top_n=5,
     ref_product = df.loc[product_id]
     ref_nutri = NUTRI_MAP.get(ref_product["nutriscore_clean"], 3)
     ref_categories = set(str(ref_product["main_category_clean"]).split(","))
+    
+    # Detect if ref product is animal-based + vegan requested
+    ref_product_type = detect_product_type(ref_product["product_name_clean"], ref_product["main_category_clean"])
+    smart_vegan_mode = (label == "vegan" and ref_product_type is not None)
 
-    # Nearest neighbors
-    n_neighbors = min(400, len(df)) # To have enough candidates
-    distances, neighbor_indices = nn_model.kneighbors(
-        X_final[product_id].reshape(1, -1), n_neighbors=n_neighbors
-    ) 
-    neighbor_indices = neighbor_indices[0]
-    similarity_scores = 1 - distances[0] # Convert distance to similarity
+    # If a label is requested, filter from the entire dataframe first
+    if label:
+        # Find products with the requested label
+        label_candidates_mask = df["detected_labels"].apply(lambda x: label in x)
+        
+        # For "vegan" label, also include products with vegan ingredients
+        if label == "vegan":
+            vegan_ingredients_mask = df["ingredients_tags_clean"].apply(has_vegan_ingredients)
+            label_candidates_mask = label_candidates_mask | vegan_ingredients_mask
+        
+        label_candidates_indices = df[label_candidates_mask].index.tolist()
+        
+        if not label_candidates_indices:
+            # No products with this label found
+            return pd.DataFrame()
+        
+        # Convert indices to positional indices for the model
+        # Find nearest neighbors among LABEL candidates only
+        similarities_all = []
+        for idx in label_candidates_indices:
+            # Compute cosine similarity (same as KNN uses)
+            dist = cosine_distances([X_final[product_id]], [X_final[idx]])[0][0]
+            sim = 1 - dist  # Convert distance to similarity (cosine returns 0-2, so 1-dist gives -1 to 1, clamped to 0-1)
+            sim = max(0, min(1, sim))  # Clamp to [0, 1]
+            similarities_all.append((idx, sim))
+        
+        # Sort by similarity
+        similarities_all.sort(key=lambda x: x[1], reverse=True)
+        
+        # For label-based searches: ignore threshold, take top N by similarity
+        # This ensures we always return results when user filters by label (vegan, bio, etc)
+        # We'll use a softer minimum: only products with sim > 0.1 (very relaxed)
+        min_similarity = 0.1  # Very relaxed threshold for label searches
+        filtered = [(idx, sim) for idx, sim in similarities_all if sim >= min_similarity]
+        
+        if not filtered:
+            # If even 0.1 threshold fails, just take top 20 anyway
+            filtered = similarities_all[:20]
+        
+        neighbor_indices = np.array([idx for idx, _ in filtered])
+        similarity_scores = np.array([sim for _, sim in filtered])
+    else:
+        # Original KNN logic (no label filter)
+        n_neighbors = min(400, len(df))
+        distances, neighbor_indices = nn_model.kneighbors(
+            X_final[product_id].reshape(1, -1), n_neighbors=n_neighbors
+        ) 
+        neighbor_indices = neighbor_indices[0]
+        similarity_scores = 1 - distances[0]
+
+        # Apply similarity threshold based on similarity_level
+        threshold = SIMILARITY_THRESHOLDS[similarity_level]
+        similarity_mask = similarity_scores >= threshold
+        neighbor_indices = neighbor_indices[similarity_mask]
+        similarity_scores = similarity_scores[similarity_mask]
 
     candidates = df.loc[neighbor_indices].copy()
 
@@ -192,28 +297,17 @@ def recommend_products_web(df, nn_model, X_final, product_id, top_n=5,
         lambda cats: len(ref_categories & set(str(cats).split(","))) / max(1, len(ref_categories | set(str(cats).split(","))))
     )
 
-    # Apply similarity threshold based on similarity_level
-    threshold = SIMILARITY_THRESHOLDS[similarity_level]
-    similarity_mask = similarity_scores >= threshold
-    neighbor_indices = neighbor_indices[similarity_mask]
-    similarity_scores = similarity_scores[similarity_mask]
-    candidates = candidates.loc[neighbor_indices].copy()
-    candidates["category_similarity"] = candidates["category_similarity"].loc[neighbor_indices]
-
     # Remove the reference product itself
-    if label:
-        label_mask = candidates["detected_labels"].apply(lambda x: label in x)
-        candidates = candidates[label_mask].copy()
-        similarity_scores = similarity_scores[label_mask.values]
-        if candidates.empty:
-            return pd.DataFrame()
+    candidates = candidates[candidates.index != product_id]
+    if candidates.empty:
+        return pd.DataFrame()
 
     # Custom similarity threshold
     mask = pd.Series(True, index=candidates.index)
     if origin:
-        mask &= candidates["origins_clean"].apply(lambda x: origin in x.split(","))
+        mask &= candidates["origins_clean"].apply(lambda x: origin in str(x).split(",") if pd.notna(x) else False)
     if brand and not substitute_other_brand:
-        mask &= candidates["brands_clean"].apply(lambda x: brand in x.split(","))
+        mask &= candidates["brands_clean"].apply(lambda x: brand in str(x).split(",") if pd.notna(x) else False)
     # Same category filter if no label specified
     if not label:
         mask &= candidates["main_category_clean"].apply(
@@ -241,6 +335,16 @@ def recommend_products_web(df, nn_model, X_final, product_id, top_n=5,
         origin=origin, origin_weight=1.0,
         env_weight=env_weight
     )
+    
+    # Boost score for good vegan replacements
+    if smart_vegan_mode:
+        # **NEW APPROACH**: Boost based on ingredients (much more reliable!)
+        # Check if ingredients contain vegan protein sources
+        vegan_ingredient_bonus = candidates["ingredients_tags_clean"].apply(
+            lambda ing: 2.0 if has_vegan_ingredients(ing) else 0
+        )
+        candidates["final_score"] = candidates["final_score"] + vegan_ingredient_bonus
+    
     # Better nutriscore flag
     candidates["better_nutriscore"] = candidates["nutriscore_clean"].map(NUTRI_MAP).fillna(3) > ref_nutri
 
