@@ -57,8 +57,9 @@ nn_model = joblib.load(path_nn)
 
 
 # Text cleaning 
-TEXT_COLUMNS = ["product_name_clean", "brands_clean", "main_category_clean",
-                "labels_tags_clean", "ingredients_tags_clean", "nutriscore_clean", "origins_clean"]
+TEXT_COLUMNS = ["product_name_clean", "brands_clean", "main_category_fr_clean",
+                "labels_tags_clean", "ingredients_tags_clean", "nutriscore_clean", "origins_clean",
+                "food_groups_tags"]
 for col in TEXT_COLUMNS:
     if col not in df.columns:
         df[col] = ""
@@ -67,49 +68,26 @@ for col in TEXT_COLUMNS:
 NUTRI_MAP = {"a": 5, "b": 4, "c": 3, "d": 2, "e": 1}
 SIMILARITY_THRESHOLDS = {1: 0.2, 2: 0.4, 3: 0.6, 4: 0.7, 5: 0.8}
 
-# Product type keywords for smart detection
-ANIMAL_PRODUCTS = {
-    "meat": ["meat", "chicken", "beef", "pork", "lamb", "turkey", "veal", "viande", "poulet", "boeuf", "porc"],
-    "fish": ["fish", "salmon", "tuna", "cod", "trout", "poisson", "saumon", "thon", "morue"],
-    "dairy": ["milk", "cheese", "yogurt", "butter", "cream", "fromage", "lait", "yaourt", "crème", "beurre"],
-    "egg": ["egg", "œuf", "eggs", "œufs"]
+# FOOD GROUPS SUBSTITUTION FOR VEGAN MODE
+VEGAN_FOOD_GROUP_SUBSTITUTES = {
+    "en:fish-meat-eggs": ["en:cereals-and-potatoes", "en:legumes", "en:cereals"],  # Meat/fish → cereals/legumes
+    "en:milk-and-dairy-products": ["en:plant-based-milk-substitutes"]  # Dairy → plant milk
 }
 
-VEGAN_REPLACEMENTS = {
-    "meat": ["tofu", "tempeh", "seitan", "lentil", "pea", "bean", "légumineuse", "protéine végétale"],
-    "fish": ["algae", "seaweed", "tofu", "tempeh", "algue"],
-    "dairy": ["almond milk", "soy milk", "oat milk", "coconut milk", "lait d'amande", "lait de soja", "lait d'avoine"],
-    "egg": ["flax", "chia", "egg replacement", "lin", "chia"]
-}
-
-def detect_product_type(product_name: str, category: str):
-    """DDetect the product type (meat, fish, dairy, egg)"""
-    text = f"{product_name} {category}".lower()
-    for ptype, keywords in ANIMAL_PRODUCTS.items():
-        for kw in keywords:
-            if kw in text:
-                return ptype
-    return None
-
-def is_vegan_replacement(product_name: str, product_type: str):
-    """ Check if product_name is a vegan replacement for the given product_type """
-    if not product_type or product_type not in VEGAN_REPLACEMENTS:
-        return False
-    text = product_name.lower()
-    for kw in VEGAN_REPLACEMENTS[product_type]:
-        if kw in text:
-            return True
-    return False
-
-# Vegan ingredient patterns for regex matching
-VEGAN_INGREDIENTS_REGEX = r"(soja|soy|tofu|tempeh|seitan|lentil|lentille|pois|pea|beans|legumineuse|vegetal|cereal|riz|ble|avoine|oat|lupini|pois-chiche|chickpea|feve)"
-
-def has_vegan_ingredients(ingredients_text):
-    """Check if ingredients contain vegan protein sources using regex"""
-    if not isinstance(ingredients_text, str) or ingredients_text.strip() == "":
-        return False
-    text = ingredients_text.lower()
-    return bool(re.search(VEGAN_INGREDIENTS_REGEX, text))
+def get_vegan_food_group_substitutes(food_groups_str):
+    """Return vegan substitute food groups for a reference product"""
+    if not isinstance(food_groups_str, str) or pd.isna(food_groups_str):
+        return []
+    
+    food_groups_list = str(food_groups_str).split(",")
+    substitutes = []
+    
+    for fg in food_groups_list:
+        fg = fg.strip()
+        if fg in VEGAN_FOOD_GROUP_SUBSTITUTES:
+            substitutes.extend(VEGAN_FOOD_GROUP_SUBSTITUTES[fg])
+    
+    return substitutes
 
 # Label keywords to facilitate detection. List based on common labels found in the dataset.
 LABEL_KEYWORDS = {
@@ -152,7 +130,7 @@ LABEL_KEYWORDS = {
 
 # Label detection
 def labels_matches(text: str, label_keywords=LABEL_KEYWORDS):
-    """Détecte labels catégorisés avec matching regex intelligent"""
+    """Detect labels in the cleaned labels_tags column"""
     if not isinstance(text, str) or text.strip() == "":
         return []
     text = text.lower() # Normalize
@@ -194,7 +172,14 @@ def compute_score(candidates, similarity_scores, label=None, label_weight=1.0,
 
     # Origin bonus
     if origin:
-        bonus += candidates["origins_clean"].apply(lambda x: int(origin in x.split(","))).values * origin_weight
+        def safe_origin_check(x):
+            try:
+                if pd.isna(x):
+                    return 0
+                return int(origin in str(x).lower().split(","))
+            except:
+                return 0
+        bonus += candidates["origins_clean"].apply(safe_origin_check).values * origin_weight
 
     # Environmental score bonus
     if "environmental_score_score" in candidates.columns:
@@ -203,18 +188,6 @@ def compute_score(candidates, similarity_scores, label=None, label_weight=1.0,
             bonus += (env / env.max()) * env_weight
 
     return similarity_scores * (1 + bonus)
-
-# Vegan filter
-def filter_vegan(candidates):
-    animal_keywords = ["lait", "fromage", "oeuf", "beurre", "crème", "viande", "jambon", 
-                       "bœuf", "porc", "poisson", "saumon"]
-    # Function to check if ingredients contain animal products
-    def is_vegan(ingredients):
-        if not isinstance(ingredients, str):
-            return True
-        ingredients = ingredients.lower()
-        return not any(kw in ingredients for kw in animal_keywords)
-    return candidates[candidates["ingredients_tags_clean"].apply(is_vegan)]
 
 # Main recommendation function
 def recommend_products_web(df, nn_model, X_final, product_id, top_n=5,
@@ -228,91 +201,140 @@ def recommend_products_web(df, nn_model, X_final, product_id, top_n=5,
     # Reference product details
     ref_product = df.loc[product_id]
     ref_nutri = NUTRI_MAP.get(ref_product["nutriscore_clean"], 3)
-    ref_categories = set(str(ref_product["main_category_clean"]).split(","))
+    ref_categories = set(str(ref_product["food_groups_tags"]).split(",")) if pd.notna(ref_product["food_groups_tags"]) else set()
     
     # Detect if ref product is animal-based + vegan requested
-    ref_product_type = detect_product_type(ref_product["product_name_clean"], ref_product["main_category_clean"])
-    smart_vegan_mode = (label == "vegan" and ref_product_type is not None)
-
-    # If a label is requested, filter from the entire dataframe first
-    if label:
-        # Find products with the requested label
-        label_candidates_mask = df["detected_labels"].apply(lambda x: label in x)
-        
-        # For "vegan" label, also include products with vegan ingredients
-        if label == "vegan":
-            vegan_ingredients_mask = df["ingredients_tags_clean"].apply(has_vegan_ingredients)
-            label_candidates_mask = label_candidates_mask | vegan_ingredients_mask
-        
-        label_candidates_indices = df[label_candidates_mask].index.tolist()
-        
-        if not label_candidates_indices:
-            # No products with this label found
+    # Check food_groups_tags directly for "en:fish-meat-eggs" or "en:milk-and-dairy-products"
+    ref_food_groups = str(ref_product.get("food_groups_tags", "")).lower()
+    is_animal_product = "en:fish-meat-eggs" in ref_food_groups or "en:milk-and-dairy-products" in ref_food_groups
+    smart_vegan_mode = (label == "vegan" and is_animal_product)
+    
+    # For vegan mode: filter to substitute food groups first, then score
+    if smart_vegan_mode:
+        vegan_substitutes = get_vegan_food_group_substitutes(ref_product["food_groups_tags"])
+        if vegan_substitutes:
+            # Filter to products with substitute food groups
+            substitute_mask = df["food_groups_tags"].apply(
+                lambda fg: any(sub in str(fg) for sub in vegan_substitutes) if pd.notna(fg) else False
+            )
+            substitute_candidates = df[substitute_mask].copy()
+            
+            # Score by embedding similarity with these candidates
+            if not substitute_candidates.empty:
+                # Compute similarity scores for all substitute candidates
+                similarity_scores_all = 1 - cosine_distances(X_final[product_id].reshape(1, -1), X_final)[0]
+                
+                # Extract scores for substitute candidates
+                candidate_indices = substitute_candidates.index
+                candidate_similarity = similarity_scores_all[candidate_indices]
+                
+                # Apply boost for tofu/tempeh/seitan (well-known vegan proteins)
+                protein_boost = substitute_candidates["product_name_clean"].apply(
+                    lambda name: 5.0 if any(p in str(name).lower() for p in ["tofu", "tempeh", "seitan"]) else 0
+                )
+                boosted_similarity = candidate_similarity + protein_boost.values
+                
+                # Sort by boosted similarity - get MORE candidates for filtering
+                top_indices = np.argsort(-boosted_similarity)[:top_n * 10]  # Get many more for filtering
+                candidates = substitute_candidates.iloc[top_indices].copy()
+                similarity_scores = candidate_similarity[top_indices]
+            else:
+                return pd.DataFrame()
+        else:
             return pd.DataFrame()
-        
-        # Convert indices to positional indices for the model
-        # Find nearest neighbors among LABEL candidates only
-        similarities_all = []
-        for idx in label_candidates_indices:
-            # Compute cosine similarity (same as KNN uses)
-            dist = cosine_distances([X_final[product_id]], [X_final[idx]])[0][0]
-            sim = 1 - dist  # Convert distance to similarity (cosine returns 0-2, so 1-dist gives -1 to 1, clamped to 0-1)
-            sim = max(0, min(1, sim))  # Clamp to [0, 1]
-            similarities_all.append((idx, sim))
-        
-        # Sort by similarity
-        similarities_all.sort(key=lambda x: x[1], reverse=True)
-        
-        # For label-based searches: ignore threshold, take top N by similarity
-        # This ensures we always return results when user filters by label (vegan, bio, etc)
-        # We'll use a softer minimum: only products with sim > 0.1 (very relaxed)
-        min_similarity = 0.1  # Very relaxed threshold for label searches
-        filtered = [(idx, sim) for idx, sim in similarities_all if sim >= min_similarity]
-        
-        if not filtered:
-            # If even 0.1 threshold fails, just take top 20 anyway
-            filtered = similarities_all[:20]
-        
-        neighbor_indices = np.array([idx for idx, _ in filtered])
-        similarity_scores = np.array([sim for _, sim in filtered])
     else:
-        # Original KNN logic (no label filter)
+        # KNN search logic (normal flow)
         n_neighbors = min(400, len(df))
         distances, neighbor_indices = nn_model.kneighbors(
             X_final[product_id].reshape(1, -1), n_neighbors=n_neighbors
-        ) 
+        )
         neighbor_indices = neighbor_indices[0]
         similarity_scores = 1 - distances[0]
 
-        # Apply similarity threshold based on similarity_level
-        threshold = SIMILARITY_THRESHOLDS[similarity_level]
+        # Apply similarity threshold based on similarity_level (relaxed for label searches)
+        if label:
+            # For label-based searches, use very relaxed threshold
+            threshold = 0.1
+        else:
+            threshold = SIMILARITY_THRESHOLDS[similarity_level]
+        
         similarity_mask = similarity_scores >= threshold
         neighbor_indices = neighbor_indices[similarity_mask]
         similarity_scores = similarity_scores[similarity_mask]
 
-    candidates = df.loc[neighbor_indices].copy()
+        candidates = df.loc[neighbor_indices].copy()
 
-    # Category similarity computation 
-    candidates["category_similarity"] = candidates["main_category_clean"].apply(
-        lambda cats: len(ref_categories & set(str(cats).split(","))) / max(1, len(ref_categories | set(str(cats).split(","))))
+    # Category similarity computation using food_groups_tags (more standardized)
+    candidates["category_similarity"] = candidates["food_groups_tags"].apply(
+        lambda cats: len(ref_categories & set(str(cats).split(","))) / max(1, len(ref_categories | set(str(cats).split(",")))) if pd.notna(cats) else 0
     )
 
-    # Remove the reference product itself
-    candidates = candidates[candidates.index != product_id]
+    # Remove the reference product itself and sync similarity_scores
+    ref_mask = candidates.index != product_id
+    candidates = candidates[ref_mask]
+    similarity_scores = similarity_scores[ref_mask]
+    
     if candidates.empty:
         return pd.DataFrame()
 
-    # Custom similarity threshold
+    # Custom filters
     mask = pd.Series(True, index=candidates.index)
+    
+    # Filter by label if specified
+    if label:
+        label_mask = candidates["detected_labels"].apply(lambda x: label in x if isinstance(x, list) else False)
+        
+        # For "vegan" label, also look for food_group substitutes
+        if label == "vegan":
+            # Use vegan_substitutes calculated earlier if in smart_vegan_mode
+            if smart_vegan_mode and vegan_substitutes:
+                # Include products with substitute food groups (e.g., legumes for meat)
+                vegan_food_groups_mask = candidates["food_groups_tags"].apply(
+                    lambda fg: any(sub in str(fg) for sub in vegan_substitutes) if pd.notna(fg) else False
+                )
+            else:
+                vegan_food_groups_mask = False
+            
+            # Also include officially vegan products
+            official_vegan_mask = candidates["detected_labels"].apply(lambda x: "vegan" in x if isinstance(x, list) else False)
+            
+            # Combine: official vegan OR substitute food groups
+            label_mask = official_vegan_mask | vegan_food_groups_mask
+        
+        mask &= label_mask
+    
+    # Filter by origin if specified
     if origin:
-        mask &= candidates["origins_clean"].apply(lambda x: origin in str(x).split(",") if pd.notna(x) else False)
+        def safe_origin_filter(x):
+            try:
+                if pd.isna(x):
+                    return False
+                return origin.lower() in str(x).lower()
+            except:
+                return False
+        mask &= candidates["origins_clean"].apply(safe_origin_filter)
+    
+    # Filter by brand if specified
     if brand and not substitute_other_brand:
-        mask &= candidates["brands_clean"].apply(lambda x: brand in str(x).split(",") if pd.notna(x) else False)
-    # Same category filter if no label specified
-    if not label:
-        mask &= candidates["main_category_clean"].apply(
-            lambda cats: len(set(str(cats).split(",")) & set(ref_categories)) > 0
-        )
+        def safe_brand_filter(x):
+            try:
+                if pd.isna(x):
+                    return False
+                return brand.lower() in str(x).lower()
+            except:
+                return False
+        mask &= candidates["brands_clean"].apply(safe_brand_filter)
+    
+    # Filter by same category to keep results relevant (using food_groups_tags for consistency)
+    # In smart_vegan_mode: candidates already filtered by substitute food_groups, so skip
+    if not smart_vegan_mode:
+        def has_similar_food_group(food_groups):
+            if pd.isna(food_groups) or not ref_categories:
+                return True  # If no reference categories, accept all
+            candidate_groups = set(str(food_groups).split(","))
+            return bool(candidate_groups & ref_categories)
+        
+        mask &= candidates["food_groups_tags"].apply(has_similar_food_group)
 
     candidates = candidates[mask].copy()
     similarity_scores = similarity_scores[mask.values]
@@ -336,14 +358,25 @@ def recommend_products_web(df, nn_model, X_final, product_id, top_n=5,
         env_weight=env_weight
     )
     
-    # Boost score for good vegan replacements
-    if smart_vegan_mode:
-        # **NEW APPROACH**: Boost based on ingredients (much more reliable!)
-        # Check if ingredients contain vegan protein sources
-        vegan_ingredient_bonus = candidates["ingredients_tags_clean"].apply(
-            lambda ing: 2.0 if has_vegan_ingredients(ing) else 0
+    # Boost score for good vegan replacements based on food groups
+    if smart_vegan_mode and vegan_substitutes:
+        # Boost products that have substitute food groups (already filtered in)
+        vegan_food_group_bonus = candidates["food_groups_tags"].apply(
+            lambda fg: 2.0 if pd.notna(fg) and any(sub in str(fg) for sub in vegan_substitutes) else 0
         )
-        candidates["final_score"] = candidates["final_score"] + vegan_ingredient_bonus
+        candidates["final_score"] = candidates["final_score"] + vegan_food_group_bonus
+        
+        # Boost for tofu, tempeh, seitan (well-known vegan proteins)
+        protein_boost = candidates["product_name_clean"].apply(
+            lambda name: 5.0 if any(p in str(name).lower() for p in ["tofu", "tempeh", "seitan"]) else 0
+        )
+        candidates["final_score"] = candidates["final_score"] + protein_boost
+        
+        # Light boost for officially vegan products
+        vegan_label_bonus = candidates["detected_labels"].apply(
+            lambda x: 0.5 if isinstance(x, list) and "vegan" in x else 0
+        )
+        candidates["final_score"] = candidates["final_score"] + vegan_label_bonus
     
     # Better nutriscore flag
     candidates["better_nutriscore"] = candidates["nutriscore_clean"].map(NUTRI_MAP).fillna(3) > ref_nutri
@@ -352,41 +385,41 @@ def recommend_products_web(df, nn_model, X_final, product_id, top_n=5,
 
 # Test block
 if __name__ == "__main__":
-    print("\n🔍 Test du moteur de recommandation\n")
+    print("\n🔍 Test recommandation\n")
 
     # Display sample products
     sample = df[["product_name_clean"]].dropna().head(15)
-    print("Exemples de produits disponibles :")
+    print("Available products:\n")
     for idx, row in sample.iterrows():
         print(f"{idx} -> {row['product_name_clean']}")
 
     # User input
     try:
-        product_id = int(input("\nEntrez l'ID du produit de référence : "))
+        product_id = int(input("\nEnter the reference product ID: "))
         if product_id not in df.index:
             raise ValueError
     except ValueError:
-        print("ID invalide ou non présent dans le dataset.")
+        print("IInvalid ID or not present in the dataset.")
         exit()
 
-    label = input("Label souhaité (bio, vegan, etc. - optionnel) : ").lower().strip() or None
-    origin = input("Origine souhaitée (optionnel) : ").lower().strip() or None
-    brand = input("Marque identique ? (laisser vide = peu importe) : ").lower().strip() or None
+    label = input("Desired label (organic, vegan, etc. - optional): ").lower().strip() or None
+    origin = input("Desired origin (optional): ").lower().strip() or None
+    brand = input("Same brand? (leave empty = any): ").lower().strip() or None
 
     # Numerical parameters
     try:
-        similarity_level = int(input("Niveau de ressemblance (1-5) : ") or 5)
-        label_weight = float(input("Poids du label (défaut=1) : ") or 1)
-        nutri_weight = float(input("Poids Nutriscore (défaut=1) : ") or 1)
-        env_weight = float(input("Poids environnement (défaut=1) : ") or 1)
+        similarity_level = int(input("Similarity level (1-5): ") or 5)
+        label_weight = float(input("Label weight (default=1): ") or 1)
+        nutri_weight = float(input("Nutriscore weight (default=1): ") or 1)
+        env_weight = float(input("Environment weight (default=1): ") or 1)
     except ValueError:
-        print("Valeur incorrecte, paramètres par défaut appliqués.")
+        print("Incorrect value, default parameters applied.")
         similarity_level = 5
         label_weight = nutri_weight = env_weight = 1
 
     substitute_other_brand = brand is None
 
-    print("\n Calcul des recommandations...\n")
+    print("\n Calculating recommendations...\n")
 
     recs = recommend_products_web(
         df, nn_model, X_final, product_id,
@@ -402,9 +435,9 @@ if __name__ == "__main__":
     )
 
     if recs.empty:
-        print(" Aucune recommandation trouvée.")
+        print(" No recommendations found.")
     else:
-        print(" Recommandations :\n")
+        print(" Recommendations:\n")
         for _, r in recs.iterrows():
             print(
                 f"- {r['product_name_clean']} | "
