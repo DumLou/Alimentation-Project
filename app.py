@@ -126,7 +126,7 @@ def search_products():
             "id": int(idx),
             "name": row["product_name_clean"],
             "brand": str(row.get("brands_clean", "")).strip() or "-",
-            "category": str(row.get("main_category_clean", "")).strip() or "-"
+            "category": str(row.get("main_category_fr_clean", "")).strip() or "-"
         }
         for idx, row in matches.iterrows()
     ]
